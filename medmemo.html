@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="MedMemo project page: a privacy-first local health memory assistant by Hansheng Zhang." data-i18n-attr="content:meta.medmemo.description">
+    <title data-i18n="meta.medmemo.title">MedMemo | Hansheng Zhang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="common.skip">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-wrap">
+        <a class="brand" href="./index.html" aria-label="Hansheng Zhang home" data-i18n-attr="aria-label:common.homeAria">
+          <span class="brand-mark">HZ</span>
+          <span class="brand-name">
+            <span>Hansheng Zhang</span>
+            <small data-i18n="common.siteDescription">AI systems portfolio</small>
+          </span>
+        </a>
+        <nav class="site-nav" aria-label="Primary navigation" data-i18n-attr="aria-label:common.navAria">
+          <a data-nav href="index.html" data-i18n="common.navHome">Home</a>
+          <a data-nav href="resume.html" data-i18n="common.navResume">Resume</a>
+          <a data-nav href="medmemo.html" data-i18n="common.navMedMemo">MedMemo</a>
+          <a data-nav href="jobcopilot.html" data-i18n="common.navJobCopilot">JobCopilot</a>
+          <a href="https://github.com/hzhan516" target="_blank" rel="noreferrer" data-i18n="common.navGitHub">GitHub</a>
+        </nav>
+        <div class="lang-switcher" aria-label="Language selector" data-i18n-attr="aria-label:common.languageSelector">
+          <button type="button" data-lang-option="en" data-i18n="common.languageEnglish">EN</button>
+          <button type="button" data-lang-option="zh-CN" data-i18n="common.languageChinese">简中</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="page-hero">
+        <div class="container project-hero-grid">
+          <div>
+            <p class="eyebrow" data-i18n="medmemo.eyebrow">MedMemo / local-first AI</p>
+            <h1 class="page-title" data-i18n="medmemo.title">A private health memory assistant that keeps sensitive context on-device.</h1>
+            <p class="page-kicker" data-i18n="medmemo.kicker">
+              MedMemo is an open-source desktop application built with Wails, Go, React, layered long-term memory, local AI inference, and privacy safeguards for personal and family health information.
+            </p>
+            <div class="inline-actions">
+              <a class="button" href="https://github.com/hzhan516/medmemo" target="_blank" rel="noreferrer" data-i18n="medmemo.viewGithub">View GitHub</a>
+              <a class="button secondary" href="./resume.html" data-i18n="medmemo.backResume">Back to resume</a>
+            </div>
+          </div>
+          <div class="project-visual">
+            <img src="./assets/medmemo-icon.png" alt="MedMemo app icon" data-i18n-attr="alt:medmemo.iconAlt">
+            <p class="caption" data-i18n="medmemo.caption">
+              Project signal: local-first privacy, long-term memory, multi-model LLM routing, and desktop distribution.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section compact">
+        <div class="container metrics-grid" aria-label="MedMemo quick facts" data-i18n-attr="aria-label:medmemo.factsAria">
+          <article class="metric-item">
+            <strong>56k+</strong>
+            <p data-i18n="medmemo.scaleBody">Approximate Go and TypeScript project scale from local job materials.</p>
+          </article>
+          <article class="metric-item">
+            <strong>v1.1.9</strong>
+            <p data-i18n="medmemo.versionBody">Current project knowledge-base snapshot version.</p>
+          </article>
+          <article class="metric-item">
+            <strong>3</strong>
+            <p data-i18n="medmemo.memoryBody">Memory layers: working, short-term, and long-term memory.</p>
+          </article>
+          <article class="metric-item">
+            <strong>MIT</strong>
+            <p data-i18n="medmemo.licenseBody">Open-source repository with public GitHub access.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container split-section">
+          <div>
+            <p class="eyebrow" data-i18n="medmemo.takeawayEyebrow">Recruiter takeaway</p>
+            <h2 data-i18n="medmemo.takeawayTitle">Why this project matters.</h2>
+            <p class="lead" data-i18n="medmemo.takeawayBody">
+              MedMemo demonstrates end-to-end ownership of a difficult AI product surface: desktop delivery, privacy constraints, model routing, local inference, memory retrieval, compliance wording, and user-facing review flows.
+            </p>
+          </div>
+          <ul class="feature-list">
+            <li>
+              <div>
+                <h3 data-i18n="medmemo.feature1Title">Local-first health data boundary</h3>
+                <p data-i18n="medmemo.feature1Body">Core data is designed to stay on the user's device, with SQLCipher/SQLite, local vector retrieval, and on-device AI paths.</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h3 data-i18n="medmemo.feature2Title">Layered memory architecture</h3>
+                <p data-i18n="medmemo.feature2Body">Conversations become reviewable facts and recallable memory instead of being pushed directly into an LLM context window.</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h3 data-i18n="medmemo.feature3Title">Multi-model provider routing</h3>
+                <p data-i18n="medmemo.feature3Body">OpenAI-compatible providers, local models, and provider health checks are organized behind replaceable interfaces.</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <h3 data-i18n="medmemo.feature4Title">Desktop product engineering</h3>
+                <p data-i18n="medmemo.feature4Body">Wails connects a Go backend with a React/TypeScript interface and cross-platform release concerns.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section proof-band">
+        <div class="container">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow" data-i18n="medmemo.proofEyebrow">Architecture proof</p>
+              <h2 data-i18n="medmemo.proofTitle">Clear boundaries under product pressure.</h2>
+            </div>
+            <p data-i18n="medmemo.proofIntro">
+              The codebase is organized around Clean Architecture, compile-time dependency injection, local storage, AI adapters, memory use cases, and privacy pipelines.
+            </p>
+          </div>
+          <div class="stack-grid">
+            <article class="stack-item">
+              <h3 data-i18n="medmemo.stack1Title">Application shell</h3>
+              <p data-i18n="medmemo.stack1Body">Wails v2, Go, React 18, TypeScript, Zustand, and desktop packaging.</p>
+            </article>
+            <article class="stack-item">
+              <h3 data-i18n="medmemo.stack2Title">Backend core</h3>
+              <p data-i18n="medmemo.stack2Body">Clean Architecture, Google Wire, domain entities, use cases, repositories, and adapters.</p>
+            </article>
+            <article class="stack-item">
+              <h3 data-i18n="medmemo.stack3Title">AI and retrieval</h3>
+              <p data-i18n="medmemo.stack3Body">LLM providers, ONNX Runtime, Hugot, embeddings, sqlite-vec, memory extraction, and confidence handling.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="notice">
+            <strong data-i18n="medmemo.safetyTitle">Safety positioning</strong>
+            <p data-i18n="medmemo.safetyBody">
+              MedMemo is a health information management and consultation-assistance tool. It is not a medical device and does not provide diagnosis, treatment, prescriptions, or medical decisions.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>&copy; <span data-year></span> Hansheng Zhang.</p>
+        <div class="footer-links">
+          <a href="./index.html" data-i18n="common.footerHome">Home</a>
+          <a href="./resume.html" data-i18n="common.footerResume">Resume</a>
+          <a href="https://github.com/hzhan516/medmemo" target="_blank" rel="noreferrer" data-i18n="common.footerMedMemoGitHub">MedMemo GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

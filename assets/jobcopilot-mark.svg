@@ -1,0 +1,10 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">JobCopilot mark</title>
+  <desc id="desc">A geometric monogram for the JobCopilot project.</desc>
+  <rect width="512" height="512" rx="72" fill="#101820"/>
+  <path d="M96 132H308C376 132 424 178 424 242C424 306 376 352 308 352H238V436H168V292H308C336 292 354 272 354 242C354 212 336 192 308 192H166V250H96V132Z" fill="#F6F1E7"/>
+  <path d="M96 132H166V250H96V132Z" fill="#D9B35F"/>
+  <path d="M238 352H308C365 352 408 320 420 269C410 352 350 408 262 408H238V352Z" fill="#0B6F63"/>
+  <path d="M86 86H426V104H86V86Z" fill="#C24A2A"/>
+  <path d="M86 408H142V426H86V408Z" fill="#C24A2A"/>
+</svg>

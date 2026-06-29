@@ -1,0 +1,28 @@
+<svg width="720" height="520" viewBox="0 0 720 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Portfolio systems map</title>
+  <desc id="desc">An abstract systems map connecting resume, MedMemo, and JobCopilot.</desc>
+  <rect width="720" height="520" fill="#F6F1E7"/>
+  <path d="M64 94H660" stroke="#161616" stroke-width="3"/>
+  <path d="M64 408H660" stroke="#161616" stroke-width="3"/>
+  <path d="M138 94V408" stroke="#161616" stroke-width="3"/>
+  <path d="M552 94V408" stroke="#161616" stroke-width="3"/>
+  <circle cx="138" cy="94" r="18" fill="#C24A2A"/>
+  <circle cx="552" cy="94" r="18" fill="#0B6F63"/>
+  <circle cx="138" cy="408" r="18" fill="#D9B35F"/>
+  <circle cx="552" cy="408" r="18" fill="#224C7A"/>
+  <path d="M138 94L552 408" stroke="#161616" stroke-width="2" stroke-dasharray="10 12"/>
+  <path d="M552 94L138 408" stroke="#161616" stroke-width="2" stroke-dasharray="10 12"/>
+  <rect x="210" y="150" width="300" height="220" rx="6" fill="#101820"/>
+  <path d="M238 190H478" stroke="#F6F1E7" stroke-width="8"/>
+  <path d="M238 230H422" stroke="#D9B35F" stroke-width="8"/>
+  <path d="M238 270H462" stroke="#F6F1E7" stroke-width="8"/>
+  <path d="M238 310H388" stroke="#0B6F63" stroke-width="8"/>
+  <rect x="88" y="40" width="104" height="34" fill="#161616"/>
+  <rect x="500" y="40" width="104" height="34" fill="#161616"/>
+  <rect x="80" y="430" width="116" height="34" fill="#161616"/>
+  <rect x="492" y="430" width="120" height="34" fill="#161616"/>
+  <path d="M104 58H176" stroke="#F6F1E7" stroke-width="5"/>
+  <path d="M516 58H588" stroke="#F6F1E7" stroke-width="5"/>
+  <path d="M96 448H180" stroke="#F6F1E7" stroke-width="5"/>
+  <path d="M508 448H596" stroke="#F6F1E7" stroke-width="5"/>
+</svg>

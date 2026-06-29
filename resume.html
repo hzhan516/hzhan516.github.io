@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Resume for Hansheng Zhang, AI backend and software engineering candidate." data-i18n-attr="content:meta.resume.description">
+    <title data-i18n="meta.resume.title">Resume | Hansheng Zhang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="common.skip">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-wrap">
+        <a class="brand" href="./index.html" aria-label="Hansheng Zhang home" data-i18n-attr="aria-label:common.homeAria">
+          <span class="brand-mark">HZ</span>
+          <span class="brand-name">
+            <span>Hansheng Zhang</span>
+            <small data-i18n="common.siteDescription">AI systems portfolio</small>
+          </span>
+        </a>
+        <nav class="site-nav" aria-label="Primary navigation" data-i18n-attr="aria-label:common.navAria">
+          <a data-nav href="index.html" data-i18n="common.navHome">Home</a>
+          <a data-nav href="resume.html" data-i18n="common.navResume">Resume</a>
+          <a data-nav href="medmemo.html" data-i18n="common.navMedMemo">MedMemo</a>
+          <a data-nav href="jobcopilot.html" data-i18n="common.navJobCopilot">JobCopilot</a>
+          <a href="https://github.com/hzhan516" target="_blank" rel="noreferrer" data-i18n="common.navGitHub">GitHub</a>
+        </nav>
+        <div class="lang-switcher" aria-label="Language selector" data-i18n-attr="aria-label:common.languageSelector">
+          <button type="button" data-lang-option="en" data-i18n="common.languageEnglish">EN</button>
+          <button type="button" data-lang-option="zh-CN" data-i18n="common.languageChinese">简中</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="page-hero">
+        <div class="container">
+          <p class="eyebrow" data-i18n="resume.eyebrow">Resume</p>
+          <h1 class="page-title" data-i18n="resume.title">AI backend engineer with open-source product depth.</h1>
+          <p class="page-kicker" data-i18n="resume.kicker">
+            Focused on AI application engineering, Java/Go backend systems, local-first AI, semantic retrieval, and containerized multi-service platforms.
+          </p>
+          <div class="inline-actions">
+            <a class="button" href="https://github.com/hzhan516" target="_blank" rel="noreferrer" data-i18n="resume.githubProfile">GitHub profile</a>
+            <a class="button secondary" href="./medmemo.html">MedMemo</a>
+            <a class="text-link" href="./jobcopilot.html" data-i18n="resume.jobcopilotLink">JobCopilot →</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container resume-layout">
+          <div class="resume-main">
+            <section class="resume-block" aria-labelledby="profile-heading">
+              <h2 id="profile-heading" data-i18n="resume.profileHeading">Profile</h2>
+              <p data-i18n="resume.profileP1">
+                M.S. Software Engineering candidate at Arizona State University with a 3.70 / 4.00 graduate GPA and hands-on project work across AI backend systems, local-first desktop applications, vector search, and full-stack product delivery.
+              </p>
+              <p data-i18n="resume.profileP2">
+                Strongest public evidence comes from two maintained projects: MedMemo, a privacy-first health memory desktop assistant, and JobCopilot, a multi-service AI job-search platform.
+              </p>
+            </section>
+
+            <section class="resume-block" aria-labelledby="projects-heading">
+              <h2 id="projects-heading" data-i18n="resume.selectedProjects">Selected Projects</h2>
+              <div class="project-grid">
+                <article class="project-card">
+                  <div class="project-head">
+                    <img class="project-logo" src="./assets/medmemo-icon.png" alt="MedMemo icon" data-i18n-attr="alt:medmemo.iconAlt">
+                    <div>
+                      <h3>MedMemo</h3>
+                      <p data-i18n="resume.medmemoSubtitle">Privacy-first health memory assistant</p>
+                    </div>
+                  </div>
+                  <p data-i18n="resume.medmemoSummary">
+                    Main author of a Wails v2 desktop application using Go Clean Architecture, Google Wire, React/TypeScript, local AI inference, SQLCipher/sqlite-vec, layered memory, and privacy safeguards.
+                  </p>
+                  <div class="tag-row">
+                    <span class="tag">Go</span>
+                    <span class="tag">Wails</span>
+                    <span class="tag">React</span>
+                    <span class="tag">ONNX Runtime</span>
+                  </div>
+                  <a class="text-link" href="./medmemo.html" data-i18n="resume.projectPage">Project page →</a>
+                </article>
+
+                <article class="project-card">
+                  <div class="project-head">
+                    <img class="project-logo" src="./assets/jobcopilot-mark.svg" alt="JobCopilot mark" data-i18n-attr="alt:jobcopilot.markAlt">
+                    <div>
+                      <h3>JobCopilot</h3>
+                      <p data-i18n="resume.jobcopilotSubtitle">AI-powered job-search platform</p>
+                    </div>
+                  </div>
+                  <p data-i18n="resume.jobcopilotSummary">
+                    Major author and maintainer of a React, Spring Boot, and FastAPI platform with resume parsing, pgvector semantic matching, RabbitMQ workers, Redis, MinIO, and Docker Compose deployment.
+                  </p>
+                  <div class="tag-row">
+                    <span class="tag">Java 21</span>
+                    <span class="tag">FastAPI</span>
+                    <span class="tag">pgvector</span>
+                    <span class="tag">RabbitMQ</span>
+                  </div>
+                  <a class="text-link" href="./jobcopilot.html" data-i18n="resume.projectPage">Project page →</a>
+                </article>
+              </div>
+            </section>
+
+            <section class="resume-block" aria-labelledby="education-heading">
+              <h2 id="education-heading" data-i18n="resume.education">Education</h2>
+              <ul class="resume-list">
+                <li>
+                  <strong data-i18n="resume.asuSchool">Arizona State University</strong>
+                  <span data-i18n="resume.asuDegree">M.S. Software Engineering, expected Fall 2026. GPA 3.70 / 4.00, 33 graduate credits completed.</span>
+                </li>
+                <li>
+                  <strong data-i18n="resume.sandaSchool">Sanda University</strong>
+                  <span data-i18n="resume.sandaDegree">Bachelor of Engineering, Computer Science and Technology, completed June 2022.</span>
+                </li>
+              </ul>
+            </section>
+
+            <section class="resume-block" aria-labelledby="coursework-heading">
+              <h2 id="coursework-heading" data-i18n="resume.coursework">Coursework And Applied ML</h2>
+              <ul class="resume-list">
+                <li>
+                  <strong data-i18n="resume.graduateCoursework">Graduate coursework</strong>
+                  <span data-i18n="resume.graduateCourseworkBody">Cloud Computing, Statistical Machine Learning, Data Processing at Scale, Artificial Intelligence, Foundations of Algorithms, Software Security, and Data Science for Software Engineers.</span>
+                </li>
+                <li>
+                  <strong data-i18n="resume.concreteProject">Interpretability Study on Concrete Strength Evolution</strong>
+                  <span data-i18n="resume.concreteProjectBody">Built a Python data science pipeline with pandas, NumPy, scikit-learn, XGBoost, SHAP, and 42-fold Leave-One-Family-Out validation. XGBoost achieved R2 = 0.9853 and RMSE = 1.41 MPa on compression strength.</span>
+                </li>
+              </ul>
+            </section>
+
+            <section class="resume-block" aria-labelledby="experience-heading">
+              <h2 id="experience-heading" data-i18n="resume.experienceCerts">Experience And Certifications</h2>
+              <ul class="resume-list">
+                <li>
+                  <strong data-i18n="resume.trainingTitle">Cloud and big-data technical training</strong>
+                  <span data-i18n="resume.trainingBody">Prior experience teaching cloud computing, Linux, data platforms, and software engineering topics to university students and working professionals.</span>
+                </li>
+                <li>
+                  <strong data-i18n="resume.certificationsTitle">Certifications</strong>
+                  <span data-i18n="resume.certificationsBody">RHCA, ZStack ZCCE, and Alibaba ACP-Cloud.</span>
+                </li>
+              </ul>
+            </section>
+          </div>
+
+          <aside class="resume-side" aria-label="Resume side details" data-i18n-attr="aria-label:resume.sideAria">
+            <section class="resume-block" aria-labelledby="roles-heading">
+              <h2 id="roles-heading" data-i18n="resume.targetRoles">Target Roles</h2>
+              <div class="tag-row">
+                <span class="tag" data-i18n="resume.roleAiBackend">AI application backend</span>
+                <span class="tag" data-i18n="resume.roleAiEngineer">AI engineer</span>
+                <span class="tag" data-i18n="resume.roleJavaBackend">Java backend</span>
+                <span class="tag" data-i18n="resume.roleGoBackend">Go backend</span>
+                <span class="tag" data-i18n="resume.roleCloudNative">Cloud-native app development</span>
+              </div>
+            </section>
+
+            <section class="resume-block" aria-labelledby="skills-heading">
+              <h2 id="skills-heading" data-i18n="resume.skills">Skills</h2>
+              <div class="skill-groups">
+                <div class="skill-group">
+                  <h3 data-i18n="resume.languages">Languages</h3>
+                  <div class="tag-row">
+                    <span class="tag">Java</span>
+                    <span class="tag">Go</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">TypeScript</span>
+                  </div>
+                </div>
+                <div class="skill-group">
+                  <h3 data-i18n="resume.backend">Backend</h3>
+                  <div class="tag-row">
+                    <span class="tag">Spring Boot</span>
+                    <span class="tag">FastAPI</span>
+                    <span class="tag">REST APIs</span>
+                    <span class="tag">DDD</span>
+                  </div>
+                </div>
+                <div class="skill-group">
+                  <h3 data-i18n="resume.aiData">AI / Data</h3>
+                  <div class="tag-row">
+                    <span class="tag">LiteLLM</span>
+                    <span class="tag">ONNX Runtime</span>
+                    <span class="tag">pgvector</span>
+                    <span class="tag">XGBoost</span>
+                  </div>
+                </div>
+                <div class="skill-group">
+                  <h3 data-i18n="resume.platform">Platform</h3>
+                  <div class="tag-row">
+                    <span class="tag">Docker</span>
+                    <span class="tag">Nginx</span>
+                    <span class="tag">GitHub Actions</span>
+                    <span class="tag">Linux</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="resume-block" aria-labelledby="languages-heading">
+              <h2 id="languages-heading" data-i18n="resume.spokenLanguages">Languages</h2>
+              <ul class="resume-list">
+                <li><strong data-i18n="resume.mandarin">Mandarin</strong> <span data-i18n="resume.mandarinLevel">Native level</span></li>
+                <li><strong data-i18n="resume.cantonese">Cantonese</strong> <span data-i18n="resume.cantoneseLevel">Fluent</span></li>
+                <li><strong data-i18n="resume.english">English</strong> <span data-i18n="resume.englishLevel">Reading and writing</span></li>
+              </ul>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>&copy; <span data-year></span> Hansheng Zhang.</p>
+        <div class="footer-links">
+          <a href="./index.html" data-i18n="common.footerHome">Home</a>
+          <a href="https://github.com/hzhan516/medmemo" target="_blank" rel="noreferrer" data-i18n="common.footerMedMemoGitHub">MedMemo GitHub</a>
+          <a href="https://github.com/hzhan516/JobCopilot" target="_blank" rel="noreferrer" data-i18n="common.footerJobCopilotGitHub">JobCopilot GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
