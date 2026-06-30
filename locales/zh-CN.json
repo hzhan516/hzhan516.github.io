@@ -1,8 +1,9 @@
 {
   "common": {
+    "name": "张瀚生（Hansheng Zhang / Doyle）",
     "siteDescription": "AI 系统作品集",
     "skip": "跳到主要内容",
-    "homeAria": "Hansheng Zhang 主页",
+    "homeAria": "张瀚生主页",
     "navAria": "主导航",
     "languageSelector": "语言切换",
     "languageEnglish": "EN",
@@ -14,30 +15,31 @@
     "navGitHub": "GitHub",
     "footerHome": "首页",
     "footerResume": "简历",
+    "footerEmail": "doyle_zhang@outlook.com",
     "footerMedMemoGitHub": "MedMemo GitHub",
     "footerJobCopilotGitHub": "JobCopilot GitHub"
   },
   "meta": {
     "index": {
-      "title": "Hansheng Zhang | AI 后端作品集",
-      "description": "Hansheng Zhang 的求职作品集，展示 AI 后端、本地优先 AI 系统和语义检索项目。"
+      "title": "张瀚生（Hansheng Zhang / Doyle）| AI 后端作品集",
+      "description": "张瀚生（Hansheng Zhang / Doyle）的求职作品集，展示 AI 后端、本地优先 AI 系统和语义检索项目。"
     },
     "resume": {
-      "title": "简历 | Hansheng Zhang",
-      "description": "Hansheng Zhang 的简历，面向 AI 后端和软件工程岗位。"
+      "title": "简历 | 张瀚生（Hansheng Zhang / Doyle）",
+      "description": "张瀚生（Hansheng Zhang / Doyle）的简历，面向 AI 后端和软件工程岗位。"
     },
     "medmemo": {
-      "title": "MedMemo | Hansheng Zhang",
-      "description": "MedMemo 项目页：Hansheng Zhang 开发的隐私优先本地健康记忆助手。"
+      "title": "MedMemo | 张瀚生（Hansheng Zhang / Doyle）",
+      "description": "MedMemo 项目页：张瀚生（Hansheng Zhang / Doyle）开发的隐私优先本地健康记忆助手。"
     },
     "jobcopilot": {
-      "title": "JobCopilot | Hansheng Zhang",
-      "description": "JobCopilot 项目页：Hansheng Zhang 参与维护的 AI 求职平台。"
+      "title": "JobCopilot | 张瀚生（Hansheng Zhang / Doyle）",
+      "description": "JobCopilot 项目页：张瀚生（Hansheng Zhang / Doyle）参与维护的 AI 求职平台。"
     }
   },
   "index": {
     "heroEyebrow": "AI 后端 / 本地优先系统 / 语义检索",
-    "heroTitle": "Hansheng Zhang",
+    "heroTitle": "张瀚生",
     "heroLead": "Arizona State University 软件工程硕士在读，使用 Go、Java、Python、React、向量检索和容器化服务架构构建接近生产形态的 AI 应用。",
     "routesAria": "作品集核心入口",
     "viewResume": "查看简历",
@@ -49,9 +51,9 @@
     "signalEducation": "ASU 软件工程硕士",
     "signalProjects": "两个开源 AI 项目合计 10 万行以上",
     "signalCerts": "RHCA 与云计算认证背景",
-    "routeEyebrow": "选择入口",
-    "routeTitle": "给招聘者的三个快速入口。",
-    "routeIntro": "主页不直接堆简历，而是把访问者引导到最有证明力的内容：背景、MedMemo 或 JobCopilot。",
+    "routeEyebrow": "概览",
+    "routeTitle": "三个页面",
+    "routeIntro": "背景、MedMemo 与 JobCopilot。",
     "resumeEyebrow": "01 / 背景",
     "resumeTitle": "简历",
     "resumeBody": "教育背景、职业认证、技术栈、核心课程和项目经历，面向 AI 应用工程与后端开发岗位。",
