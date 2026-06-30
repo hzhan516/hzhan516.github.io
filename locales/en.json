@@ -1,8 +1,9 @@
 {
   "common": {
+    "name": "Hansheng Zhang (Doyle)",
     "siteDescription": "AI systems portfolio",
     "skip": "Skip to content",
-    "homeAria": "Hansheng Zhang home",
+    "homeAria": "Hansheng Zhang (Doyle) home",
     "navAria": "Primary navigation",
     "languageSelector": "Language selector",
     "languageEnglish": "EN",
@@ -14,30 +15,31 @@
     "navGitHub": "GitHub",
     "footerHome": "Home",
     "footerResume": "Resume",
+    "footerEmail": "doyle_zhang@outlook.com",
     "footerMedMemoGitHub": "MedMemo GitHub",
     "footerJobCopilotGitHub": "JobCopilot GitHub"
   },
   "meta": {
     "index": {
-      "title": "Hansheng Zhang | AI Backend Portfolio",
-      "description": "Hansheng Zhang portfolio for AI backend, local-first AI systems, and semantic retrieval projects."
+      "title": "Hansheng Zhang (Doyle) | AI Backend Portfolio",
+      "description": "Hansheng Zhang (Doyle) portfolio for AI backend, local-first AI systems, and semantic retrieval projects."
     },
     "resume": {
-      "title": "Resume | Hansheng Zhang",
-      "description": "Resume for Hansheng Zhang, AI backend and software engineering candidate."
+      "title": "Hansheng Zhang (Doyle) | Resume",
+      "description": "Resume for Hansheng Zhang (Doyle), AI backend and software engineering candidate."
     },
     "medmemo": {
-      "title": "MedMemo | Hansheng Zhang",
-      "description": "MedMemo project page: a privacy-first local health memory assistant by Hansheng Zhang."
+      "title": "MedMemo | Hansheng Zhang (Doyle)",
+      "description": "MedMemo project page: a privacy-first local health memory assistant by Hansheng Zhang (Doyle)."
     },
     "jobcopilot": {
-      "title": "JobCopilot | Hansheng Zhang",
-      "description": "JobCopilot project page: an AI-powered job-search platform by Hansheng Zhang."
+      "title": "JobCopilot | Hansheng Zhang (Doyle)",
+      "description": "JobCopilot project page: an AI-powered job-search platform by Hansheng Zhang (Doyle)."
     }
   },
   "index": {
     "heroEyebrow": "AI backend / local-first systems / semantic retrieval",
-    "heroTitle": "Hansheng Zhang",
+    "heroTitle": "Hansheng Zhang (Doyle)",
     "heroLead": "M.S. Software Engineering candidate at Arizona State University building production-style AI applications with Go, Java, Python, React, vector search, and containerized service architecture.",
     "routesAria": "Key portfolio routes",
     "viewResume": "View resume",
@@ -49,9 +51,9 @@
     "signalEducation": "ASU M.S. Software Engineering",
     "signalProjects": "100k+ lines across two open-source AI projects",
     "signalCerts": "RHCA plus cloud certifications",
-    "routeEyebrow": "Choose the route",
-    "routeTitle": "Three entry points for recruiters.",
-    "routeIntro": "The home page keeps the resume separate and directs visitors to the fastest proof: background, MedMemo, or JobCopilot.",
+    "routeEyebrow": "Overview",
+    "routeTitle": "Three pages.",
+    "routeIntro": "Background, MedMemo, and JobCopilot.",
     "resumeEyebrow": "01 / Background",
     "resumeTitle": "Resume",
     "resumeBody": "Education, certifications, technical stack, selected coursework, and project experience for AI application engineering and backend roles.",
