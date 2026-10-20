@@ -1,6 +1,8 @@
 # Hansheng Zhang (Doyle) Portfolio
 
-Static GitHub Pages portfolio.
+Personal resume and software engineering portfolio, published with GitHub Pages.
+The site presents education, technical skills, and contributions to MedMemo and JobCopilot
+in English and Simplified Chinese.
 
 ## Pages
 
@@ -27,17 +29,15 @@ Because browser `file://` pages usually cannot fetch JSON files, preview this si
 2. Open repository Settings.
 3. Go to Pages.
 4. Set source to the target branch and root folder `/`.
-5. Visit `https://<github-user>.github.io/<repo-name>/`.
+5. Visit <https://hzhan516.github.io/>.
 
 The site uses only static HTML, CSS, JavaScript, and local assets. No build step is required.
 
-## Design Direction
+## Content
 
-- Aesthetic: editorial product-system portfolio.
-- DFII: 13 / 15.
-- Purpose: present resume, MedMemo, and JobCopilot clearly.
-- Differentiation anchor: the home page uses a systems-map visual and three focused routes instead of a generic hero plus resume dump.
+The resume covers education, certifications, technical skills, teaching experience,
+and software projects. Project pages describe personal contributions, implementation
+choices, and resulting application workflows, with links to the public repositories.
 
-## Public Data Boundary
-
-The transcript PDF from `/home/doyle/Documents/Job` was not copied into this site because it contains private student-identifying information. The resume page only uses sanitized facts from the local job materials.
+Keep the English and Chinese content aligned with the default text in each HTML page.
+Private collaboration materials are excluded from the published site.
