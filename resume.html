@@ -40,9 +40,9 @@
       <section class="page-hero">
         <div class="container">
           <p class="eyebrow" data-i18n="resume.eyebrow">Resume</p>
-          <h1 class="page-title" data-i18n="resume.title">AI backend engineer with open-source product depth.</h1>
+          <h1 class="page-title" data-i18n="resume.title">AI Application and Backend Developer</h1>
           <p class="page-kicker" data-i18n="resume.kicker">
-            Focused on AI application engineering, Java/Go backend systems, local-first AI, semantic retrieval, and containerized multi-service platforms.
+            Go, Java, Python, React, LLM integration, semantic retrieval, and containerized services.
           </p>
           <div class="inline-actions">
             <a class="button" href="https://github.com/hzhan516" target="_blank" rel="noreferrer" data-i18n="resume.githubProfile">GitHub profile</a>
@@ -58,10 +58,10 @@
             <section class="resume-block" aria-labelledby="profile-heading">
               <h2 id="profile-heading" data-i18n="resume.profileHeading">Profile</h2>
               <p data-i18n="resume.profileP1">
-                M.S. Software Engineering candidate at Arizona State University with a 3.70 / 4.00 graduate GPA and hands-on project work across AI backend systems, local-first desktop applications, vector search, and full-stack product delivery.
+                M.S. Software Engineering candidate at Arizona State University, expected December 2026, with experience developing AI backends, desktop applications, and full-stack workflows.
               </p>
               <p data-i18n="resume.profileP2">
-                Strongest public evidence comes from two maintained projects: MedMemo, a privacy-first health memory desktop assistant, and JobCopilot, a multi-service AI job-search platform.
+                Primary developer of MedMemo and major contributor and maintainer of JobCopilot, working on conversational memory, semantic retrieval, asynchronous AI processing, and frontend-backend integration.
               </p>
             </section>
 
@@ -70,15 +70,20 @@
               <div class="project-grid">
                 <article class="project-card">
                   <div class="project-head">
-                    <img class="project-logo" src="./assets/medmemo-icon.png" alt="MedMemo icon" data-i18n-attr="alt:medmemo.iconAlt">
+                    <img class="project-logo" src="./assets/medmemo-icon.png" alt="MedMemo app icon" data-i18n-attr="alt:medmemo.iconAlt">
                     <div>
                       <h3>MedMemo</h3>
                       <p data-i18n="resume.medmemoSubtitle">Privacy-first health memory assistant</p>
                     </div>
                   </div>
                   <p data-i18n="resume.medmemoSummary">
-                    Main author of a Wails v2 desktop application using Go Clean Architecture, Google Wire, React/TypeScript, local AI inference, SQLCipher/sqlite-vec, layered memory, and privacy safeguards.
+                    Built a health memory desktop application as the primary developer, connecting Go business logic with a React/TypeScript interface through Wails.
                   </p>
+                  <ul class="resume-list">
+                    <li data-i18n="resume.medmemoMemory">Implemented three memory layers with vector and keyword retrieval to recall relevant information from earlier conversations.</li>
+                    <li data-i18n="resume.medmemoChat">Integrated model providers, streaming responses, and summary compression to manage conversation context across chat sessions.</li>
+                    <li data-i18n="resume.medmemoDelivery">Added memory and privacy workflow tests and fixed Windows packaging and CI issues to support repeatable desktop builds.</li>
+                  </ul>
                   <div class="tag-row">
                     <span class="tag">Go</span>
                     <span class="tag">Wails</span>
@@ -90,17 +95,22 @@
 
                 <article class="project-card">
                   <div class="project-head">
-                    <img class="project-logo" src="./assets/jobcopilot-mark.svg" alt="JobCopilot mark" data-i18n-attr="alt:jobcopilot.markAlt">
+                    <img class="project-logo" src="./assets/jobcopilot-mark.svg" alt="JobCopilot project mark" data-i18n-attr="alt:jobcopilot.markAlt">
                     <div>
                       <h3>JobCopilot</h3>
                       <p data-i18n="resume.jobcopilotSubtitle">AI-powered job-search platform</p>
                     </div>
                   </div>
                   <p data-i18n="resume.jobcopilotSummary">
-                    Major author and maintainer of a React, Spring Boot, and FastAPI platform with resume parsing, pgvector semantic matching, RabbitMQ workers, Redis, MinIO, and Docker Compose deployment.
+                    Developed and maintained resume and job-search workflows as a major contributor, connecting React, Spring Boot, and FastAPI through REST APIs.
                   </p>
+                  <ul class="resume-list">
+                    <li data-i18n="resume.jobcopilotMatching">Integrated PostgreSQL/pgvector retrieval to match resume content with job descriptions and support AI-assisted job search.</li>
+                    <li data-i18n="resume.jobcopilotAsync">Used RabbitMQ workers and Redis to separate long-running AI processing from user-facing API workflows.</li>
+                    <li data-i18n="resume.jobcopilotTransactions">Fixed resume-edit transaction handling by deferring vector generation until after commit, keeping external AI calls outside the database transaction.</li>
+                  </ul>
                   <div class="tag-row">
-                    <span class="tag">Java 21</span>
+                    <span class="tag">Java 25</span>
                     <span class="tag">FastAPI</span>
                     <span class="tag">pgvector</span>
                     <span class="tag">RabbitMQ</span>
@@ -115,7 +125,7 @@
               <ul class="resume-list">
                 <li>
                   <strong data-i18n="resume.asuSchool">Arizona State University</strong>
-                  <span data-i18n="resume.asuDegree">M.S. Software Engineering, expected Fall 2026. GPA 3.70 / 4.00, 33 graduate credits completed.</span>
+                  <span data-i18n="resume.asuDegree">M.S. Software Engineering, expected December 2026. GPA 3.70 / 4.00; 33 graduate credits completed as of June 2026.</span>
                 </li>
                 <li>
                   <strong data-i18n="resume.sandaSchool">Sanda University</strong>
@@ -125,15 +135,11 @@
             </section>
 
             <section class="resume-block" aria-labelledby="coursework-heading">
-              <h2 id="coursework-heading" data-i18n="resume.coursework">Coursework And Applied ML</h2>
+              <h2 id="coursework-heading" data-i18n="resume.coursework">Graduate Coursework</h2>
               <ul class="resume-list">
                 <li>
                   <strong data-i18n="resume.graduateCoursework">Graduate coursework</strong>
                   <span data-i18n="resume.graduateCourseworkBody">Cloud Computing, Statistical Machine Learning, Data Processing at Scale, Artificial Intelligence, Foundations of Algorithms, Software Security, and Data Science for Software Engineers.</span>
-                </li>
-                <li>
-                  <strong data-i18n="resume.concreteProject">Interpretability Study on Concrete Strength Evolution</strong>
-                  <span data-i18n="resume.concreteProjectBody">Built a Python data science pipeline with pandas, NumPy, scikit-learn, XGBoost, SHAP, and 42-fold Leave-One-Family-Out validation. XGBoost achieved R2 = 0.9853 and RMSE = 1.41 MPa on compression strength.</span>
                 </li>
               </ul>
             </section>
@@ -143,7 +149,7 @@
               <ul class="resume-list">
                 <li>
                   <strong data-i18n="resume.trainingTitle">Cloud and big-data technical training</strong>
-                  <span data-i18n="resume.trainingBody">Prior experience teaching cloud computing, Linux, data platforms, and software engineering topics to university students and working professionals.</span>
+                  <span data-i18n="resume.trainingBody">Taught cloud computing, Linux, data platforms, and software engineering topics to university students and working professionals.</span>
                 </li>
                 <li>
                   <strong data-i18n="resume.certificationsTitle">Certifications</strong>
@@ -155,7 +161,7 @@
 
           <aside class="resume-side" aria-label="Resume side details" data-i18n-attr="aria-label:resume.sideAria">
             <section class="resume-block" aria-labelledby="roles-heading">
-              <h2 id="roles-heading" data-i18n="resume.targetRoles">Target Roles</h2>
+              <h2 id="roles-heading" data-i18n="resume.targetRoles">Engineering Focus</h2>
               <div class="tag-row">
                 <span class="tag" data-i18n="resume.roleAiBackend">AI application backend</span>
                 <span class="tag" data-i18n="resume.roleAiEngineer">AI engineer</span>
