@@ -253,7 +253,11 @@
     "emptyBody": "首批笔记发布后会显示在这里。",
     "tocLabel": "本页内容",
     "viewSource": "在 GitHub 查看 ↗",
-    "editSource": "在 GitHub 编辑 ↗"
+    "editSource": "在 GitHub 编辑 ↗",
+    "readNote": "阅读笔记 →",
+    "bashTitle": "Bash 脚本与文本处理",
+    "bashSummary": "以一个 SSH 日志巡检脚本为主线，讲解重定向、管道、条件判断、正则表达式、grep、sed 和 awk。",
+    "bashHref": "./notes/bash-scripting-text-processing.zh-CN.html"
   },
   "writing": {
     "eyebrow": "文章",

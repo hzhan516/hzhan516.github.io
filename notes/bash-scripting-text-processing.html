@@ -1,0 +1,1655 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Redirection, pipes, variables, conditionals, loops, regular expressions, grep, sed, and awk, learned by building one SSH log audit script step by step.">
+    <title>Bash Scripting and Text Processing: Building a Log Audit Script | Notes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../script.js" defer></script>
+    <style>
+      .kb-article table { width: 100%; border-collapse: collapse; font-size: 0.86rem; display: block; overflow-x: auto; }
+      .kb-article th, .kb-article td { padding: 0.45rem 0.7rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+      .kb-article th { background: var(--mint); }
+      .kb-article :not(pre) > code { font-family: var(--font-mono); font-size: 0.85em; padding: 0.1em 0.35em; border-radius: 4px; background: var(--mint); }
+      .kb-article section > h3 { margin-top: var(--space-5); font-size: 1.05rem; }
+      .kb-article section ul, .kb-article section ol:not(.step-list) { padding-left: 1.25rem; color: var(--ink-soft); }
+      .kb-article .code-block { line-height: 1.6; white-space: pre; }
+      .kb-lang-switch { margin-top: var(--space-3); font-size: 0.85rem; }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="common.skip">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-wrap">
+        <a class="brand" href="../index.html" aria-label="Hansheng Zhang (Doyle) home" data-i18n-attr="aria-label:common.homeAria">
+          <span class="brand-mark">HZ</span>
+          <span class="brand-name">
+            <span data-i18n="common.name">Hansheng Zhang (Doyle)</span>
+            <small data-i18n="common.siteDescription">AI systems portfolio</small>
+          </span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu" data-i18n-attr="aria-label:common.menuToggle">
+          <span class="nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <div class="nav-menu" id="nav-menu">
+          <nav class="site-nav" aria-label="Primary navigation" data-i18n-attr="aria-label:common.navAria">
+            <a data-nav href="../index.html" data-i18n="common.navHome">Home</a>
+            <a data-nav data-nav-section="notes" href="../notes.html" data-i18n="common.navNotes">Notes</a>
+            <a data-nav data-nav-section="writing" href="../writing.html" data-i18n="common.navWriting">Writing</a>
+            <a data-nav href="../resume.html" data-i18n="common.navResume">Resume</a>
+            <a data-nav href="../medmemo.html" data-i18n="common.navMedMemo">MedMemo</a>
+            <a data-nav href="../jobcopilot.html" data-i18n="common.navJobCopilot">JobCopilot</a>
+            <a href="https://github.com/hzhan516" target="_blank" rel="noreferrer" data-i18n="common.navGitHub">GitHub</a>
+          </nav>
+          <div class="lang-switcher" aria-label="Language selector" data-i18n-attr="aria-label:common.languageSelector">
+            <button type="button" data-lang-option="en" data-i18n="common.languageEnglish">EN</button>
+            <button type="button" data-lang-option="zh-CN" data-i18n="common.languageChinese">简中</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="kb-layout">
+        <aside class="kb-sidebar" aria-label="Knowledge base navigation" data-i18n-attr="aria-label:notes.sidebarAria">
+          <div class="kb-search">
+            <label class="kb-label" for="kb-search" data-i18n="notes.searchLabel">Search notes</label>
+            <input id="kb-search" type="search" placeholder="Search the knowledge base…" data-kb-search data-i18n-attr="placeholder:notes.searchPlaceholder">
+          </div>
+          <div>
+            <p class="kb-label" data-i18n="notes.library">Library</p>
+            <ul class="kb-nav">
+              <li><a href="../notes.html" data-i18n="notes.overview">Overview</a></li>
+            </ul>
+          </div>
+          <details class="kb-group" open>
+            <summary data-i18n="notes.cat_ai">AI Engineering</summary>
+            <ul class="kb-nav" data-category="ai">
+              <li class="kb-empty" data-i18n="notes.emptyCategory">No notes yet</li>
+            </ul>
+          </details>
+          <details class="kb-group" open>
+            <summary data-i18n="notes.cat_backend">Backend Engineering</summary>
+            <ul class="kb-nav" data-category="backend">
+              <li class="kb-empty" data-i18n="notes.emptyCategory">No notes yet</li>
+            </ul>
+          </details>
+          <details class="kb-group" open>
+            <summary data-i18n="notes.cat_linux">Linux & System</summary>
+            <ul class="kb-nav" data-category="linux">
+              <li><a href="./bash-scripting-text-processing.html" aria-current="page">Bash Scripting and Text Processing</a></li>
+            </ul>
+          </details>
+          <details class="kb-group" open>
+            <summary data-i18n="notes.cat_cloud">Cloud & DevOps</summary>
+            <ul class="kb-nav" data-category="cloud">
+              <li class="kb-empty" data-i18n="notes.emptyCategory">No notes yet</li>
+            </ul>
+          </details>
+          <details class="kb-group" open>
+            <summary data-i18n="notes.cat_workflow">Engineering Workflow</summary>
+            <ul class="kb-nav" data-category="workflow">
+              <li class="kb-empty" data-i18n="notes.emptyCategory">No notes yet</li>
+            </ul>
+          </details>
+
+          <div class="kb-card">
+            <strong data-i18n="notes.cardTitle">Notes as code</strong>
+            <p data-i18n="notes.cardBody">Written in HTML, versioned in Git, published with GitHub Pages.</p>
+          </div>
+        </aside>
+
+        <article class="kb-article">
+          <p class="breadcrumb">Notes / Linux &amp; System / Bash</p>
+          <h1>Bash Scripting and Text Processing: Building a Log Audit Script</h1>
+          <p class="lead">Redirection, pipes, variables, conditionals, loops, regular expressions, grep, sed, and awk, learned by building one SSH log audit script step by step.</p>
+          <div class="kb-meta">
+            <span class="tag">Linux &amp; System</span>
+            <span>35 min read</span>
+            <span>·</span>
+            <time datetime="2026-11-05">Updated Nov 2026</time>
+          </div>
+          <p class="kb-lang-switch"><a class="text-link" href="./bash-scripting-text-processing.zh-CN.html" hreflang="zh-Hans-CN">中文版 →</a></p>
+
+          <section id="goal">
+<h2>Goal and sample data</h2>
+<p>This note builds <code>log-audit.sh</code> from scratch. The script reads an RHEL-style SSH security log (<code>/var/log/secure</code>), counts failed logins, groups them by source IP, lists successful logins, and uses its exit code to tell the caller whether an alert is needed. Each section introduces one topic and grows the script a little. The complete version is at the end.</p>
+<p>Start by creating a sample log with a heredoc (explained below). Every output shown in this note comes from running the commands against this data.</p>
+<pre class="code-block"><code>mkdir -p ~/log-audit &amp;&amp; cd ~/log-audit
+cat &gt; sample-secure.log &lt;&lt;'EOF'
+Nov  5 08:01:12 servera sshd[1201]: Failed password for root from 192.168.1.50 port 50122 ssh2
+Nov  5 08:01:15 servera sshd[1201]: Failed password for root from 192.168.1.50 port 50122 ssh2
+Nov  5 08:02:03 servera sshd[1210]: Accepted password for student from 192.168.1.10 port 50200 ssh2
+Nov  5 08:03:44 servera sshd[1222]: Failed password for invalid user admin from 203.0.113.7 port 41000 ssh2
+Nov  5 08:03:47 servera sshd[1222]: Failed password for invalid user admin from 203.0.113.7 port 41000 ssh2
+Nov  5 08:03:50 servera sshd[1222]: Failed password for invalid user test from 203.0.113.7 port 41002 ssh2
+Nov  5 08:05:10 servera sudo[1300]:  student : TTY=pts/0 ; PWD=/home/student ; USER=root ; COMMAND=/usr/bin/dnf update
+Nov  5 08:06:21 servera sshd[1310]: Failed password for student from 192.168.1.10 port 50300 ssh2
+Nov  5 08:06:30 servera sshd[1311]: Accepted publickey for operator from 10.0.0.5 port 52000 ssh2
+Nov  5 08:07:02 servera sshd[1320]: Failed password for root from 192.168.1.50 port 50400 ssh2
+EOF
+</code></pre>
+<p>The finished script prints this:</p>
+<pre class="code-block"><code>$ ./log-audit.sh sample-secure.log
+== SSH audit: 1 file(s), threshold=3 ==
+Failed attempts: 7
+
+-- Failed logins by source IP --
+IP              FAILS  USERS                STATUS
+192.168.1.50        3  root                 ALERT
+203.0.113.7         3  admin,test           ALERT
+192.168.1.10        1  student              ok
+
+-- Successful logins --
+operator   from 10.0.0.5        via publickey x1
+student    from 192.168.1.10    via password  x1
+2 source(s) reached the threshold
+$ echo $?
+2
+</code></pre>
+<div class="notice"><strong>On a real system</strong><p>Reading <code>/var/log/secure</code> on RHEL requires root, for example <code>sudo ./log-audit.sh /var/log/secure</code>. The sample file is enough for practice.</p></div>
+          </section>
+          <section id="first-script">
+<h2>The first script: shebang, permissions, and debugging</h2>
+<p>A shell script is a text file of commands that run in order. Moving repeated command-line work into a script cuts typing mistakes and makes the work reusable and reviewable.</p>
+<h3>The shebang</h3>
+<p>The first line starts with <code>#!</code>, called the shebang (or hash-bang). When the kernel executes the file, it reads this line and runs the script with the interpreter named there:</p>
+<pre class="code-block"><code>#!/bin/bash
+echo &quot;log-audit: starting&quot;
+</code></pre>
+<ul>
+<li>The interpreter path must exist. Otherwise you get <code>bad interpreter: No such file or directory</code>.</li>
+<li>Without a shebang, the result depends on the caller. Bash usually runs the file in a new Bash process, but other programs may refuse to execute it. Always include the shebang.</li>
+<li>For portability across systems, <code>#!/usr/bin/env bash</code> finds bash through <code>PATH</code>.</li>
+</ul>
+<h3>Permissions and ways to run a script</h3>
+<pre class="code-block"><code>chmod +x log-audit.sh      # add execute permission
+./log-audit.sh             # run from the current directory; needs +x; uses the shebang
+bash log-audit.sh          # run bash explicitly; no +x needed; the shebang is ignored
+~/log-audit/log-audit.sh   # absolute path
+</code></pre>
+<p>The shell looks up commands only in the directories listed in <code>PATH</code>, and the current directory is not one of them, so you need <code>./</code>. If you put the script in <code>~/bin</code> or <code>/usr/local/bin</code> (both in the default RHEL <code>PATH</code>), you can run it by name.</p>
+<p>Both <code>./script</code> and <code>bash script</code> run the script in a child process, so variables it sets do not affect your shell. <code>source script</code> (or <code>. script</code>) runs it in the current shell, which is how configuration files are loaded.</p>
+<h3>Debugging and safety options</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bash -n script</code></td>
+<td>Check syntax without running</td>
+</tr>
+<tr>
+<td><code>bash -x script</code> or <code>set -x</code> inside</td>
+<td>Print each expanded command to stderr before running it, prefixed with <code>+</code></td>
+</tr>
+<tr>
+<td><code>set +x</code></td>
+<td>Turn tracing off</td>
+</tr>
+<tr>
+<td><code>set -e</code></td>
+<td>Exit as soon as a command returns a non-zero status</td>
+</tr>
+<tr>
+<td><code>set -u</code></td>
+<td>Treat references to unset variables as errors</td>
+</tr>
+<tr>
+<td><code>set -o pipefail</code></td>
+<td>A pipeline fails if any command in it fails</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ bash -xc 'n=2; echo $((n*2))'
++ n=2
++ echo 4
+4
+</code></pre>
+<p><code>log-audit.sh</code> puts <code>set -euo pipefail</code> right after the shebang so errors surface early. The cost is that commands that can legitimately "fail", such as grep finding no match (status 1), need an explicit <code>|| true</code>.</p>
+          </section>
+          <section id="io">
+<h2>I/O channels and redirection</h2>
+<p>Every process starts with at least three file descriptors (fds):</p>
+<table>
+<thead>
+<tr>
+<th>fd</th>
+<th>Name</th>
+<th>Default</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>stdin</td>
+<td>keyboard</td>
+<td>read only</td>
+</tr>
+<tr>
+<td>1</td>
+<td>stdout</td>
+<td>terminal</td>
+<td>write only, normal output</td>
+</tr>
+<tr>
+<td>2</td>
+<td>stderr</td>
+<td>terminal</td>
+<td>write only, errors and diagnostics</td>
+</tr>
+<tr>
+<td>3+</td>
+<td>other files</td>
+<td>none</td>
+<td>files the program opens</td>
+</tr>
+</tbody>
+</table>
+<p>Redirection changes where these channels point, so a process reads from or writes to a file instead of the terminal.</p>
+<table>
+<thead>
+<tr>
+<th>Syntax</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&gt; file</code></td>
+<td>stdout to file, overwrite</td>
+</tr>
+<tr>
+<td><code>&gt;&gt; file</code></td>
+<td>stdout to file, append</td>
+</tr>
+<tr>
+<td><code>2&gt; file</code></td>
+<td>stderr to file, overwrite</td>
+</tr>
+<tr>
+<td><code>2&gt;/dev/null</code></td>
+<td>discard stderr</td>
+</tr>
+<tr>
+<td><code>&gt; file 2&gt;&amp;1</code> or <code>&amp;&gt; file</code></td>
+<td>stdout and stderr to file, overwrite</td>
+</tr>
+<tr>
+<td><code>&gt;&gt; file 2&gt;&amp;1</code> or <code>&amp;&gt;&gt; file</code></td>
+<td>stdout and stderr to file, append</td>
+</tr>
+<tr>
+<td><code>&lt; file</code></td>
+<td>read stdin from file</td>
+</tr>
+<tr>
+<td><code>&gt;&amp;2</code></td>
+<td>send this command's stdout to stderr</td>
+</tr>
+</tbody>
+</table>
+<h3>Order matters</h3>
+<p>Bash processes redirections from left to right. <code>2&gt;&amp;1</code> means "point fd 2 wherever fd 1 points <strong>right now</strong>":</p>
+<pre class="code-block"><code>$ ls /etc/hostname /nope &gt; out.txt 2&gt;&amp;1; cat out.txt
+ls: cannot access '/nope': No such file or directory
+/etc/hostname
+
+$ ls /etc/hostname /nope 2&gt;&amp;1 &gt; out.txt; echo '--file:'; cat out.txt
+ls: cannot access '/nope': No such file or directory
+--file:
+/etc/hostname
+</code></pre>
+<p>The first command points stdout at the file, then sends stderr to the same place, so both end up in the file. The second points stderr at the terminal (where stdout was at that moment) and only then moves stdout to the file, so the error still reaches the terminal.</p>
+<h3>Error messages in scripts</h3>
+<p>Unless a command reports an error, everything a script prints with <code>echo</code> goes to stdout. Usage text and error messages belong on stderr. That way they don't end up in a report the user redirected to a file, and a downstream command in a pipe won't treat them as data:</p>
+<pre class="code-block"><code>usage() {
+    echo &quot;Usage: $(basename &quot;$0&quot;) LOGFILE...&quot; &gt;&amp;2
+    exit 1
+}
+</code></pre>
+<h3>Heredocs</h3>
+<p>Text between <code>&lt;&lt;'EOF'</code> and a line containing only <code>EOF</code> becomes the command's stdin, which is handy for generating files or multi-line input. With a quoted delimiter, <code>$variables</code> in the body are not expanded. Without quotes they are:</p>
+<pre class="code-block"><code>$ cat &lt;&lt;EOF
+user: $USER-ish
+EOF
+user: doyle-ish
+</code></pre>
+<p>The related form <code>&lt;&lt;&lt;</code> is a here string. It feeds one string to stdin, and the script uses it to hand variable contents to <code>awk</code> or <code>wc</code>, as in <code>wc -l &lt;&lt;&lt; "$failed"</code>.</p>
+          </section>
+          <section id="pipes">
+<h2>Pipes, tee, and xargs</h2>
+<p>The pipe <code>|</code> connects the stdout of the command on its left to the stdin of the command on its right. In a chain, data flows through each command in turn, and each step does one job:</p>
+<pre class="code-block"><code>$ awk '/Failed/{print $11}' sample-secure.log | sort | uniq -c | sort -rn
+      3 192.168.1.50
+      2 admin
+      1 test
+      1 192.168.1.10
+</code></pre>
+<p>(<code>admin</code> and <code>test</code> are a field-shift bug that the sed section fixes.)</p>
+<ul>
+<li>Redirection moves data into or out of <strong>files</strong>. A pipe sends data to <strong>another process</strong>.</li>
+<li>A pipe carries only stdout. To include stderr, write <code>2&gt;&amp;1 |</code> or <code>|&amp;</code>.</li>
+<li>On a single command, redirection takes effect before the pipe. <code>ls /etc/hostname &gt; out.txt | wc -l</code> prints <code>0</code>, because stdout already goes to the file and nothing enters the pipe.</li>
+</ul>
+<h3>tee: save and pass along</h3>
+<p><code>tee</code> works like a T-junction in a pipe. It writes stdin to a file and to stdout at the same time, so you can save a report and still see it:</p>
+<pre class="code-block"><code>$ ./log-audit.sh sample-secure.log 2&gt;&amp;1 | tee report.txt | tail -1
+2 source(s) reached the threshold
+</code></pre>
+<p><code>tee -a</code> appends. A common use is <code>echo "line" | sudo tee -a /etc/some.conf</code>. Writing <code>sudo echo ... &gt;&gt; file</code> fails because your own unprivileged shell performs the redirection.</p>
+<h3>xargs: turn stdin into arguments</h3>
+<p>Some commands take arguments and ignore stdin (<code>rm</code>, <code>ls</code>, <code>ssh-copy-id</code>). <code>xargs</code> converts stdin into arguments:</p>
+<pre class="code-block"><code>find /etc -maxdepth 1 -name 'host*' 2&gt;/dev/null | xargs ls -ld
+printf 'a\nb\n' | xargs -I {} echo 'host={}'     # -I sets a placeholder; runs once per line
+awk '{print $1}' hosts.list | xargs -I {} ssh-copy-id root@{}
+</code></pre>
+<p><code>find ... | ls -l</code> is a classic mistake. <code>ls</code> never reads stdin, so it just lists the current directory. When file names may contain spaces, use <code>find -print0 | xargs -0</code>.</p>
+          </section>
+          <section id="variables">
+<h2>Variables, quoting, and the environment</h2>
+<h3>Assignment and expansion</h3>
+<p>Variable names may contain letters, digits, and underscores, and cannot start with a digit. No spaces are allowed around <code>=</code>:</p>
+<pre class="code-block"><code>threshold=3                # correct
+threshold = 3              # wrong: runs a command named threshold
+echo &quot;$threshold&quot;          # expand
+echo &quot;${threshold}rd&quot;      # braces delimit the name
+today=$(date +%F)          # command substitution
+threshold=${THRESHOLD:-3}  # use 3 when THRESHOLD is unset or empty
+</code></pre>
+<p><code>set</code> lists every variable and function in the current shell, and <code>unset name</code> removes a variable.</p>
+<h3>Quoting</h3>
+<p>Some characters mean something to the shell (<code>$</code>, space, <code>*</code>, <code>;</code>, <code>|</code>, and others). Three tools remove that meaning:</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backslash <code>\</code></td>
+<td>Escapes the next character only</td>
+</tr>
+<tr>
+<td>Single quotes <code>'...'</code></td>
+<td>Everything is literal; nothing expands</td>
+</tr>
+<tr>
+<td>Double quotes <code>"..."</code></td>
+<td>Keep spaces, but still expand <code>$var</code>, <code>$(cmd)</code>, and <code>`cmd`</code></td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ name=world; echo 'single: $name' &quot;double: $name&quot; escaped: \$name
+single: $name double: world escaped: $name
+</code></pre>
+<p>Rules of thumb: always double-quote expansions (<code>"$file"</code>), or a value containing spaces splits into several arguments. Put regular expressions and awk programs in single quotes so the shell doesn't touch their <code>$</code> and <code>*</code>.</p>
+<h3>Shell variables and environment variables</h3>
+<p>A plain variable belongs to the current shell only. <code>export</code> turns it into an environment variable, which child processes started afterwards (including scripts) can see:</p>
+<pre class="code-block"><code>$ FOO=shell; bash -c 'echo child sees: [$FOO]'
+child sees: []
+$ export FOO; bash -c 'echo child sees: [$FOO]'
+child sees: [shell]
+$ export -n FOO      # stop exporting; FOO stays as a shell variable
+$ unset FOO          # remove it entirely
+</code></pre>
+<ul>
+<li><code>env</code> lists environment variables. <code>set</code> lists all variables.</li>
+<li><code>VAR=value command</code> sets an environment variable for that one command. <code>log-audit.sh</code> takes its settings this way: <code>THRESHOLD=5 ./log-audit.sh sample-secure.log</code>.</li>
+<li><code>PATH</code> is the most important environment variable, since it decides where the shell looks for commands. Variables such as <code>HISTFILE</code>, <code>HISTFILESIZE</code>, and <code>HISTTIMEFORMAT="%F %T "</code> tune <code>history</code> (the format codes match <code>date</code>).</li>
+</ul>
+<h3>Startup files</h3>
+<p>Which files Bash reads at startup depends on how it starts:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Scope</th>
+<th>Read by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/etc/profile</code>, <code>/etc/profile.d/*.sh</code></td>
+<td>all users</td>
+<td>login shells</td>
+</tr>
+<tr>
+<td><code>~/.bash_profile</code></td>
+<td>one user</td>
+<td>login shells (on RHEL it also loads <code>~/.bashrc</code>)</td>
+</tr>
+<tr>
+<td><code>~/.bashrc</code></td>
+<td>one user</td>
+<td>interactive non-login shells, such as a new terminal window</td>
+</tr>
+<tr>
+<td><code>/etc/bashrc</code></td>
+<td>all users</td>
+<td>loaded from <code>~/.bashrc</code></td>
+</tr>
+</tbody>
+</table>
+<p>A script running non-interactively reads <strong>none</strong> of these. It only inherits the variables its parent exported. So a script must not rely on variables or functions defined in your <code>~/.bashrc</code>. Set what it needs inside the script, or pass it in through the environment. After editing a startup file, run <code>source ~/.bashrc</code> to apply it to the current shell.</p>
+          </section>
+          <section id="args-exit">
+<h2>Arguments, exit codes, and exec</h2>
+<h3>Positional parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$0</code></td>
+<td>Script name (the path used to call it)</td>
+</tr>
+<tr>
+<td><code>$1</code> … <code>$9</code>, <code>${10}</code></td>
+<td>Arguments 1 through N</td>
+</tr>
+<tr>
+<td><code>$#</code></td>
+<td>Number of arguments</td>
+</tr>
+<tr>
+<td><code>"$@"</code></td>
+<td>All arguments, each kept separate</td>
+</tr>
+<tr>
+<td><code>"$*"</code></td>
+<td>All arguments joined into one string with spaces</td>
+</tr>
+<tr>
+<td><code>$?</code></td>
+<td>Exit code of the last command</td>
+</tr>
+<tr>
+<td><code>$$</code></td>
+<td>PID of the current shell</td>
+</tr>
+</tbody>
+</table>
+<p>The difference between <code>"$@"</code> and <code>"$*"</code> shows when arguments contain spaces:</p>
+<pre class="code-block"><code>#!/bin/bash
+# args.sh
+echo &quot;\$# = $#&quot;
+for a in &quot;$@&quot;; do echo &quot;  \&quot;\$@\&quot; -&gt; [$a]&quot;; done
+for a in &quot;$*&quot;; do echo &quot;  \&quot;\$*\&quot; -&gt; [$a]&quot;; done
+for a in $*;   do echo &quot;  \$*   -&gt; [$a]&quot;; done
+</code></pre>
+<pre class="code-block"><code>$ ./args.sh 'web 01' db
+$# = 2
+  &quot;$@&quot; -&gt; [web 01]
+  &quot;$@&quot; -&gt; [db]
+  &quot;$*&quot; -&gt; [web 01 db]
+  $*   -&gt; [web]
+  $*   -&gt; [01]
+  $*   -&gt; [db]
+</code></pre>
+<p>To loop over arguments, almost always use <code>"$@"</code>. Unquoted <code>$*</code> (and unquoted <code>$@</code>) split again on spaces. <code>log-audit.sh</code> passes all log files to grep unchanged with <code>"$@"</code>.</p>
+<h3>Exit codes</h3>
+<p>Every command ends with an exit code from 0 to 255. Zero means success, non-zero means failure, and different non-zero values can identify different errors. The parent reads the code from <code>$?</code>. A script calls <code>exit N</code> to stop early with code N. Without <code>exit</code>, it returns the code of its last command.</p>
+<pre class="code-block"><code>$ bash -c 'false; echo rc=$?; exit 7'; echo outer=$?
+rc=1
+outer=7
+</code></pre>
+<p><code>log-audit.sh</code> uses <code>0</code> for a clean run, <code>1</code> for usage or input errors, and <code>2</code> when a source reaches the alert threshold. Cron or a monitoring system can then act on the result without parsing text.</p>
+<p>Watch grep's exit codes: 0 for a match, 1 for no match, 2 for an error. Under <code>set -e</code>, "no match" would end the script, hence <code>grep ... || true</code>.</p>
+<h3>exec</h3>
+<p><code>exec</code> has two uses:</p>
+<ol>
+<li><code>exec command</code> <strong>replaces</strong> the current shell process with the command. The PID stays the same, and nothing after it in the script runs. Wrapper scripts use it as their last step, for example <code>exec java -jar app.jar "$@"</code>.</li>
+<li><code>exec</code> with only redirections changes the current shell's own file descriptors for every command that follows.</li>
+</ol>
+<pre class="code-block"><code>#!/bin/bash
+echo &quot;before exec&quot;
+exec echo &quot;exec replaced the shell&quot;
+echo &quot;never printed&quot;
+</code></pre>
+<p><code>log-audit.sh</code> uses the second form for <code>OUTPUT=file</code>. From that point on, all stdout goes to the file while error messages still reach the terminal.</p>
+<pre class="code-block"><code>if [ -n &quot;${OUTPUT:-}&quot; ]; then
+    exec &gt; &quot;$OUTPUT&quot;
+fi
+</code></pre>
+          </section>
+          <section id="tests">
+<h2>Tests and conditionals</h2>
+<p><code>test expression</code> and <code>[ expression ]</code> are the same command. The result comes back as an exit code: 0 when true, 1 when false. <code>[</code> is a command name, so it needs spaces on both sides.</p>
+<pre class="code-block"><code>$ x=5; [ $x -gt 3 ]; echo $?; [ $x -eq 3 ]; echo $?
+0
+1
+</code></pre>
+<h3>Common tests</h3>
+<table>
+<thead>
+<tr>
+<th>Numbers</th>
+<th>Strings</th>
+<th>Files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-eq</code> equal</td>
+<td><code>=</code> or <code>==</code> equal</td>
+<td><code>-e</code> exists</td>
+</tr>
+<tr>
+<td><code>-ne</code> not equal</td>
+<td><code>!=</code> not equal</td>
+<td><code>-f</code> regular file</td>
+</tr>
+<tr>
+<td><code>-gt</code> greater than</td>
+<td><code>-z</code> empty</td>
+<td><code>-d</code> directory</td>
+</tr>
+<tr>
+<td><code>-ge</code> greater or equal</td>
+<td><code>-n</code> not empty</td>
+<td><code>-r</code> / <code>-w</code> / <code>-x</code> readable / writable / executable</td>
+</tr>
+<tr>
+<td><code>-lt</code> less than</td>
+<td></td>
+<td><code>-s</code> size greater than zero</td>
+</tr>
+<tr>
+<td><code>-le</code> less or equal</td>
+<td></td>
+<td><code>-L</code> symbolic link</td>
+</tr>
+</tbody>
+</table>
+<p><code>!</code> negates a test, and <code>&amp;&amp;</code> / <code>||</code> combine tests: <code>[ -f "$f" ] &amp;&amp; [ -r "$f" ]</code>.</p>
+<h3><code>[[ ]]</code> and <code>(( ))</code></h3>
+<ul>
+<li><code>[[ ... ]]</code> is a Bash keyword. Unquoted variables inside it don't split, and it supports glob matching <code>[[ $host == server* ]]</code> and regex matching <code>[[ $n =~ ^[0-9]+$ ]]</code>.</li>
+<li><code>(( ... ))</code> evaluates integer arithmetic and comparisons, and variables inside need no <code>$</code>: <code>(( fails &gt;= limit ))</code>.</li>
+<li><code>$(( ... ))</code> returns the result:</li>
+</ul>
+<pre class="code-block"><code>$ a=10; echo $(( a + 1 )) $(( a / 3 )) $(( a % 3 )) $(( a * 3 )) $(( a ** 2 ))
+11 3 1 30 100
+</code></pre>
+<p>Bash arithmetic is integer only, so <code>10/3</code> gives 3. For decimals, use <code>awk 'BEGIN{printf "%.2f\n", 10/3}'</code> or <code>bc</code>.</p>
+<h3>if / elif / else</h3>
+<pre class="code-block"><code>if (( fails &gt;= limit )); then
+    status=ALERT
+elif (( fails &gt; 0 )); then
+    status=WARN
+else
+    status=OK
+fi
+</code></pre>
+<p>Bash tests the conditions in order, runs the first branch whose condition holds, and skips the rest. If none holds, it runs <code>else</code>. The condition can be any command, not only <code>[ ]</code>: <code>if grep -q root "$file"; then ...</code>.</p>
+<p>For simple cases, <code>&amp;&amp;</code> and <code>||</code> are shorter: <code>[ $# -ge 1 ] || usage</code>.</p>
+<h3>Input checks in the script</h3>
+<pre class="code-block"><code>[ $# -ge 1 ] || usage
+threshold=${THRESHOLD:-3}
+[[ $threshold =~ ^[0-9]+$ ]] || { echo &quot;error: THRESHOLD must be a number&quot; &gt;&amp;2; exit 1; }
+</code></pre>
+          </section>
+          <section id="loops">
+<h2>Loops</h2>
+<h3>for</h3>
+<pre class="code-block"><code>for file in &quot;$@&quot;; do              # loop over arguments
+    if [ ! -r &quot;$file&quot; ]; then
+        echo &quot;error: cannot read $file&quot; &gt;&amp;2
+        exit 1
+    fi
+done
+
+for i in $(seq 2 2 8); do ...     # 2 4 6 8: start, step, end
+for i in {1..5}; do ...           # brace expansion
+for ((i=1; i&lt;=3; i++)); do ...    # C style
+</code></pre>
+<h3>Reading a file line by line: use while read</h3>
+<p><code>for line in $(cat file)</code> is a common mistake. It splits on whitespace, not on lines:</p>
+<pre class="code-block"><code>$ printf 'web 01\ndb\n' &gt; hosts.txt
+$ for h in $(cat hosts.txt); do echo &quot;[$h]&quot;; done
+[web]
+[01]
+[db]
+$ while read -r h; do echo &quot;[$h]&quot;; done &lt; hosts.txt
+[web 01]
+[db]
+</code></pre>
+<p><code>read -r</code> turns off backslash escapes. <code>read</code> can also split a line into several variables, and the last one receives the rest of the line. The successful-logins part of the script uses this:</p>
+<pre class="code-block"><code>awk '{ print $9, $11, $7 }' &lt;&lt;&lt; &quot;$accepted&quot; | sort | uniq -c |
+while read -r count user ip method; do
+    printf '%-10s from %-15s via %-9s x%d\n' &quot;$user&quot; &quot;$ip&quot; &quot;$method&quot; &quot;$count&quot;
+done
+</code></pre>
+<p>A <code>while</code> loop on the right side of a pipe runs in a subshell, so variables set inside it are gone after the loop. To keep them, use <code>done &lt; file</code> or <code>done &lt; &lt;(command)</code>.</p>
+<p><code>until condition; do ...; done</code> loops until the condition holds. <code>break</code> leaves a loop, and <code>continue</code> starts the next iteration.</p>
+          </section>
+          <section id="grep-regex">
+<h2>Regular expressions and grep</h2>
+<p>A regular expression is a small language for describing text patterns. <code>grep</code>, <code>sed</code>, <code>awk</code>, <code>vim</code>, <code>less</code>, and languages like Python and Perl all use it. Linux tools use two flavors:</p>
+<ul>
+<li><strong>BRE</strong> (basic) is the default for <code>grep</code> and <code>sed</code>. <code>?</code>, <code>+</code>, <code>{}</code>, <code>()</code>, and <code>|</code> only become special when written <code>\?</code>, <code>\+</code>, <code>\{\}</code>, <code>\(\)</code>, <code>\|</code>.</li>
+<li><strong>ERE</strong> (extended) is used by <code>grep -E</code>, <code>sed -E</code>, and <code>awk</code>. Those symbols work directly, which reads more clearly.</li>
+</ul>
+<pre class="code-block"><code>$ printf 'catcat\ncat\n' | grep 'c\(at\)\{2\}'      # BRE
+catcat
+$ printf 'catcat\ncat\n' | grep -E '(cat){2}'       # ERE, same match
+catcat
+</code></pre>
+<h3>Metacharacters</h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.</code></td>
+<td>any single character</td>
+<td><code>c.t</code> matches cat, c5t</td>
+</tr>
+<tr>
+<td><code>[abc]</code> / <code>[^abc]</code></td>
+<td>one character in / not in the set</td>
+<td><code>c[aou]t</code> matches only cat, cot, cut</td>
+</tr>
+<tr>
+<td><code>^</code> / <code>$</code></td>
+<td>start / end of line</td>
+<td><code>^cat$</code> is a line containing only cat</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>previous item zero or more times</td>
+<td><code>c.*t</code> starts with c, ends with t (not <code>c*t</code>)</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>previous item one or more times (ERE)</td>
+<td><code>[0-9]+</code></td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>previous item zero or one time (ERE)</td>
+<td><code>colou?r</code></td>
+</tr>
+<tr>
+<td><code>{n}</code> <code>{n,}</code> <code>{,m}</code> <code>{n,m}</code></td>
+<td>repetition counts (ERE)</td>
+<td><code>c.{2}t</code> matches coat</td>
+</tr>
+<tr>
+<td><code>(a\|b)</code></td>
+<td>grouping and alternation (ERE)</td>
+<td><code>(admin\|test)</code></td>
+</tr>
+<tr>
+<td><code>\b</code> / <code>\B</code></td>
+<td>word boundary / not a boundary</td>
+<td><code>\broot\b</code></td>
+</tr>
+<tr>
+<td><code>\&lt;</code> / <code>\&gt;</code></td>
+<td>start / end of a word</td>
+<td><code>\&lt;cat</code></td>
+</tr>
+<tr>
+<td><code>\w</code> / <code>\W</code></td>
+<td>word character <code>[_[:alnum:]]</code> / non-word</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\s</code> / <code>\S</code></td>
+<td>whitespace / non-whitespace</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>POSIX character classes go inside brackets, as in <code>[[:digit:]]+</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[:alnum:]</code></td>
+<td>letters and digits</td>
+</tr>
+<tr>
+<td><code>[:alpha:]</code></td>
+<td>letters</td>
+</tr>
+<tr>
+<td><code>[:digit:]</code></td>
+<td>digits 0-9</td>
+</tr>
+<tr>
+<td><code>[:xdigit:]</code></td>
+<td>hexadecimal digits</td>
+</tr>
+<tr>
+<td><code>[:lower:]</code> / <code>[:upper:]</code></td>
+<td>lowercase / uppercase letters</td>
+</tr>
+<tr>
+<td><code>[:blank:]</code></td>
+<td>space and tab</td>
+</tr>
+<tr>
+<td><code>[:space:]</code></td>
+<td>all whitespace, including newline, carriage return, and vertical tab</td>
+</tr>
+<tr>
+<td><code>[:punct:]</code></td>
+<td>punctuation</td>
+</tr>
+<tr>
+<td><code>[:print:]</code> / <code>[:graph:]</code></td>
+<td>printable characters with / without space</td>
+</tr>
+<tr>
+<td><code>[:cntrl:]</code></td>
+<td>control characters</td>
+</tr>
+</tbody>
+</table>
+<p>See <code>man 7 regex</code> for the full reference.</p>
+<h3>Common grep options</h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-i</code></td>
+<td>ignore case</td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td>invert: show lines that don't match</td>
+</tr>
+<tr>
+<td><code>-c</code></td>
+<td>print only the count of matching lines</td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td>show line numbers</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td>print only the matched part</td>
+</tr>
+<tr>
+<td><code>-w</code></td>
+<td>match whole words</td>
+</tr>
+<tr>
+<td><code>-q</code></td>
+<td>print nothing; only set the exit code (good inside <code>if</code>)</td>
+</tr>
+<tr>
+<td><code>-l</code></td>
+<td>list only the names of files that match</td>
+</tr>
+<tr>
+<td><code>-h</code> / <code>-H</code></td>
+<td>hide / show the file name prefix</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>search directories recursively</td>
+</tr>
+<tr>
+<td><code>-A n</code> / <code>-B n</code> / <code>-C n</code></td>
+<td>show n lines after / before / around each match</td>
+</tr>
+<tr>
+<td><code>-e PAT</code></td>
+<td>give a pattern; repeat for a logical OR</td>
+</tr>
+<tr>
+<td><code>-E</code></td>
+<td>use ERE</td>
+</tr>
+<tr>
+<td><code>-F</code></td>
+<td>treat the pattern as a fixed string</td>
+</tr>
+</tbody>
+</table>
+<p>Regular expressions often contain shell metacharacters such as <code>$</code>, <code>*</code>, and <code>{}</code>, so always single-quote them.</p>
+<h3>Extracting data with grep</h3>
+<pre class="code-block"><code>$ grep -c 'Failed password' sample-secure.log
+7
+$ grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' sample-secure.log | sort -u
+10.0.0.5
+192.168.1.10
+192.168.1.50
+203.0.113.7
+$ grep -v sshd sample-secure.log
+Nov  5 08:05:10 servera sudo[1300]:  student : TTY=pts/0 ; PWD=/home/student ; USER=root ; COMMAND=/usr/bin/dnf update
+$ grep -n -A1 'Accepted publickey' sample-secure.log
+9:Nov  5 08:06:30 servera sshd[1311]: Accepted publickey for operator from 10.0.0.5 port 52000 ssh2
+10-Nov  5 08:07:02 servera sshd[1320]: Failed password for root from 192.168.1.50 port 50400 ssh2
+$ grep -F '[1201]' sample-secure.log | wc -l     # brackets matched literally
+2
+</code></pre>
+<p>The script uses grep first, to pull the relevant lines into variables:</p>
+<pre class="code-block"><code>failed=$(grep -hE 'sshd\[[0-9]+\]: Failed password' &quot;$@&quot; || true)
+accepted=$(grep -hE 'sshd\[[0-9]+\]: Accepted ' &quot;$@&quot; || true)
+</code></pre>
+<p><code>-h</code> drops the file name prefix that grep adds with several files, so every line has the same format. <code>\[</code> matches a literal bracket.</p>
+          </section>
+          <section id="sed">
+<h2>sed in depth</h2>
+<p><code>sed</code> (stream editor) reads input one line at a time, runs a set of commands on each line, and prints the result. It suits rule-based batch edits like substitution, deletion, insertion, and extraction, and it is the usual tool for editing configuration files from a script.</p>
+<h3>How sed runs</h3>
+<ol>
+<li>Read a line, strip the newline, and place it in the <strong>pattern space</strong>.</li>
+<li>Run each command whose address matches.</li>
+<li>Print the pattern space (unless <code>-n</code> is set), clear it, and read the next line.</li>
+</ol>
+<p>A second buffer, the <strong>hold space</strong>, keeps data between lines. It starts empty.</p>
+<p>Basic form: <code>sed [options] 'address command' file</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-n</code></td>
+<td>don't auto-print; output only what <code>p</code> prints</td>
+</tr>
+<tr>
+<td><code>-E</code></td>
+<td>use ERE</td>
+</tr>
+<tr>
+<td><code>-e script</code></td>
+<td>add a script fragment; can repeat</td>
+</tr>
+<tr>
+<td><code>-f file</code></td>
+<td>read the sed script from a file</td>
+</tr>
+<tr>
+<td><code>-i[suffix]</code></td>
+<td>edit the file in place; with a suffix, keep a backup such as <code>-i.bak</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Addresses</h3>
+<table>
+<thead>
+<tr>
+<th>Address</th>
+<th>Selects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>3</code></td>
+<td>line 3</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>the last line</td>
+</tr>
+<tr>
+<td><code>2,5</code></td>
+<td>lines 2 through 5</td>
+</tr>
+<tr>
+<td><code>/re/</code></td>
+<td>lines matching the regex</td>
+</tr>
+<tr>
+<td><code>/re1/,/re2/</code></td>
+<td>from a line matching re1 to the next line matching re2</td>
+</tr>
+<tr>
+<td><code>1~4</code></td>
+<td>every 4th line starting at line 1 (GNU)</td>
+</tr>
+<tr>
+<td><code>addr!</code></td>
+<td>lines that do not match the address</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ sed -n '3p' sample-secure.log
+Nov  5 08:02:03 servera sshd[1210]: Accepted password for student from 192.168.1.10 port 50200 ssh2
+$ sed -n '/sudo/,/publickey/p' sample-secure.log
+Nov  5 08:05:10 servera sudo[1300]:  student : TTY=pts/0 ; PWD=/home/student ; USER=root ; COMMAND=/usr/bin/dnf update
+Nov  5 08:06:21 servera sshd[1310]: Failed password for student from 192.168.1.10 port 50300 ssh2
+Nov  5 08:06:30 servera sshd[1311]: Accepted publickey for operator from 10.0.0.5 port 52000 ssh2
+$ sed -n '/Accepted/=' sample-secure.log      # = prints the line number
+3
+9
+</code></pre>
+<h3>The s command</h3>
+<p><code>s/regex/replacement/flags</code>. Any character can be the delimiter. When the pattern contains paths, <code>#</code> or <code>|</code> is easier to read: <code>s#/usr/bin/#BIN:#</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>g</code></td>
+<td>replace every match on the line (default is the first only)</td>
+</tr>
+<tr>
+<td><code>N</code> (a number)</td>
+<td>replace only the Nth match</td>
+</tr>
+<tr>
+<td><code>I</code></td>
+<td>ignore case (GNU)</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>print the line if a substitution happened; usually with <code>-n</code></td>
+</tr>
+<tr>
+<td><code>w file</code></td>
+<td>write the line to a file if a substitution happened</td>
+</tr>
+</tbody>
+</table>
+<p>In the replacement, <code>&amp;</code> is the whole match and <code>\1</code>…<code>\9</code> are groups (<code>\(\)</code> in BRE, <code>()</code> in ERE):</p>
+<pre class="code-block"><code>$ sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/&lt;&amp;&gt;/' sample-secure.log | sed -n '1p'
+Nov  5 08:01:12 servera sshd[1201]: Failed password for root from &lt;192.168.1.50&gt; port 50122 ssh2
+
+$ sed -E 's/from ([0-9.]+) port ([0-9]+)/from \2:\1/' sample-secure.log | sed -n '1p'
+Nov  5 08:01:12 servera sshd[1201]: Failed password for root from 50122:192.168.1.50 ssh2
+
+$ sed -E 's/([0-9]+\.[0-9]+\.[0-9]+)\.[0-9]+/\1.xxx/g' sample-secure.log | sed -n '3p'
+Nov  5 08:02:03 servera sshd[1210]: Accepted password for student from 192.168.1.xxx port 50200 ssh2
+
+$ sed -n 's/Failed/FAILED/2p' &lt;&lt;&lt; 'Failed Failed Failed'
+Failed FAILED Failed
+
+$ sed -n '/Failed/{s/.*from \([0-9.]*\).*/\1/;p}' sample-secure.log | sort | uniq -c
+      1 192.168.1.10
+      3 192.168.1.50
+      3 203.0.113.7
+</code></pre>
+<p>The third example masks IP addresses before you share a log. The last one groups commands under a single address with <code>{}</code>, extracting the IP from Failed lines only.</p>
+<h3>Other commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>p</code></td>
+<td>print the pattern space</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>delete the pattern space and start the next cycle</td>
+</tr>
+<tr>
+<td><code>a text</code> / <code>i text</code></td>
+<td>add a line after / before the current line</td>
+</tr>
+<tr>
+<td><code>c text</code></td>
+<td>replace the current line with text</td>
+</tr>
+<tr>
+<td><code>y/abc/ABC/</code></td>
+<td>translate characters one-for-one, like <code>tr</code></td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>print the current line and quit</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>print the current line (without <code>-n</code>) and replace it with the next line</td>
+</tr>
+<tr>
+<td><code>N</code></td>
+<td>append the next line to the pattern space, separated by a newline</td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>print the line number</td>
+</tr>
+<tr>
+<td><code>r file</code> / <code>w file</code></td>
+<td>insert a file after the current line / write the current line to a file</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ sed '/sudo/d; /Accepted/d' sample-secure.log | wc -l
+7
+$ sed -e '1i # audit start' -e '$a # audit end' -e '2,9d' sample-secure.log
+# audit start
+Nov  5 08:01:12 servera sshd[1201]: Failed password for root from 192.168.1.50 port 50122 ssh2
+Nov  5 08:07:02 servera sshd[1320]: Failed password for root from 192.168.1.50 port 50400 ssh2
+# audit end
+$ sed '/sudo/c [sudo line redacted]' sample-secure.log | sed -n '7p'
+[sudo line redacted]
+$ sed '3q' sample-secure.log | wc -l        # stops reading after line 3
+3
+$ printf 'a\nb\nc\nd\n' | sed -n 'n;p'       # even lines only
+b
+d
+$ printf 'line1\nline2\nline3\nline4\n' | sed 'N;s/\n/ | /'   # join pairs of lines
+line1 | line2
+line3 | line4
+</code></pre>
+<h3>The hold space</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>h</code> / <code>H</code></td>
+<td>copy / append the pattern space to the hold space</td>
+</tr>
+<tr>
+<td><code>g</code> / <code>G</code></td>
+<td>copy / append the hold space to the pattern space</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td>swap the two buffers</td>
+</tr>
+</tbody>
+</table>
+<p>Reverse the line order (like <code>tac</code>):</p>
+<pre class="code-block"><code>$ printf 'a\nb\nc\n' | sed -n '1!G;h;$p'
+c
+b
+a
+</code></pre>
+<p>Line by line: line 1 (<code>a</code>) skips <code>G</code>, and <code>h</code> saves it. On line 2, <code>G</code> appends the hold space to give <code>b\na</code>, which <code>h</code> saves again. On the last line the pattern space holds <code>c\nb\na</code>, and <code>$p</code> prints it.</p>
+<p>Join blank-line-separated paragraphs into single lines:</p>
+<pre class="code-block"><code>$ printf 'para1 a\npara1 b\n\npara2 a\npara2 b\n' | sed -n '/./{H;$!d};x;s/\n/ /g;s/^ //;/./p'
+para1 a para1 b
+para2 a para2 b
+</code></pre>
+<p>Non-empty lines accumulate in the hold space with <code>H</code>, and <code>d</code> ends the cycle unless it is the last line. On a blank line or the last line, <code>x</code> swaps the paragraph out, newlines become spaces, and the result is printed.</p>
+<h3>Editing configuration files in place</h3>
+<pre class="code-block"><code>$ printf 'key=old\n' &gt; c.conf
+$ sed -i.bak 's/^key=.*/key=new/' c.conf; cat c.conf c.conf.bak
+key=new
+key=old
+</code></pre>
+<p>When you change system configuration, always pass a backup suffix, and preview the result without <code>-i</code> first.</p>
+<h3>In the script: normalize the data with sed</h3>
+<p>Printing the fields of line 4 shows the problem. <code>invalid user</code> adds two words and shifts every later field to the right:</p>
+<pre class="code-block"><code>$ sed -n '4p' sample-secure.log | awk '{for (i=6; i&lt;=NF; i++) printf &quot;$%d=%s &quot;, i, $i; print &quot;&quot;}'
+$6=Failed $7=password $8=for $9=invalid $10=user $11=admin $12=from $13=203.0.113.7 $14=port $15=41000 $16=ssh2
+</code></pre>
+<p>That is why <code>admin</code> and <code>test</code> showed up in the earlier <code>uniq -c</code> output. Normalize both formats with sed before awk sees them:</p>
+<pre class="code-block"><code>$ sed -E 's/ for invalid user / for /' sample-secure.log | sed -n '4,6p'
+Nov  5 08:03:44 servera sshd[1222]: Failed password for admin from 203.0.113.7 port 41000 ssh2
+Nov  5 08:03:47 servera sshd[1222]: Failed password for admin from 203.0.113.7 port 41000 ssh2
+Nov  5 08:03:50 servera sshd[1222]: Failed password for test from 203.0.113.7 port 41002 ssh2
+</code></pre>
+<pre class="code-block"><code>failed=$(grep -hE 'sshd\[[0-9]+\]: Failed password' &quot;$@&quot; \
+    | sed -E 's/ for invalid user / for /' || true)
+</code></pre>
+<p>After this, the user name is always <code>$9</code> and the IP is always <code>$11</code>.</p>
+          </section>
+          <section id="awk">
+<h2>awk in depth</h2>
+<p><code>awk</code> treats its input as <strong>records</strong> (one line by default), and splits each record into <strong>fields</strong> (on runs of whitespace by default). An awk program is a list of <code>pattern { action }</code> rules. For each record, awk checks every pattern and runs the action when it matches. It suits column extraction, filtering, counting, and formatted reports.</p>
+<h3>Fields and built-in variables</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$0</code></td>
+<td>the whole record</td>
+</tr>
+<tr>
+<td><code>$1</code>…<code>$N</code></td>
+<td>field N; <code>$NF</code> is the last, <code>$(NF-1)</code> the second to last</td>
+</tr>
+<tr>
+<td><code>NF</code></td>
+<td>number of fields in the record</td>
+</tr>
+<tr>
+<td><code>NR</code></td>
+<td>records read so far, across all files</td>
+</tr>
+<tr>
+<td><code>FNR</code></td>
+<td>record number within the current file</td>
+</tr>
+<tr>
+<td><code>FS</code> / <code>OFS</code></td>
+<td>input / output field separator; <code>-F</code> sets FS</td>
+</tr>
+<tr>
+<td><code>RS</code> / <code>ORS</code></td>
+<td>input / output record separator</td>
+</tr>
+<tr>
+<td><code>FILENAME</code></td>
+<td>current file name</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ awk '{print $1, $2, $3}' sample-secure.log | head -2
+Nov 5 08:01:12
+Nov 5 08:01:15
+$ awk -F: 'BEGIN{OFS=&quot; -&gt; &quot;} NR&lt;=2 {print $1, $6}' /etc/passwd
+root -&gt; /root
+bin -&gt; /bin
+$ awk 'END{print NR}' sample-secure.log
+10
+</code></pre>
+<p>In the first example, the two spaces in <code>Nov  5</code> became one. The default FS treats any run of whitespace as one separator, and <code>print</code> joins fields with OFS (a single space). <code>cut -d' '</code> treats every space as a separator, which makes it fragile on logs like this one.</p>
+<h3>Patterns</h3>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>regex</td>
+<td><code>/Accepted/</code></td>
+</tr>
+<tr>
+<td>field match</td>
+<td><code>$5 ~ /^sudo/</code>, <code>$6 !~ /Failed/</code></td>
+</tr>
+<tr>
+<td>comparison</td>
+<td><code>$3 &gt;= 1000</code>, <code>$6 == "Failed"</code></td>
+</tr>
+<tr>
+<td>combination</td>
+<td><code>/Failed/ &amp;&amp; /root/</code>, <code>!/sshd/</code></td>
+</tr>
+<tr>
+<td>range</td>
+<td><code>NR==2, NR==4</code></td>
+</tr>
+<tr>
+<td><code>BEGIN</code> / <code>END</code></td>
+<td>run once before input / after all input</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ awk '/Accepted/ {print $9, $11}' sample-secure.log
+student 192.168.1.10
+operator 10.0.0.5
+$ awk '$5 ~ /^sudo/ {print $6, $NF}' sample-secure.log
+student update
+$ awk '/Failed/ &amp;&amp; /root/ {n++} END {print n+0}' sample-secure.log
+3
+$ awk -F: '$3 &gt;= 1000 &amp;&amp; $3 &lt; 60000 {print $1, $7}' /etc/passwd   # regular users
+</code></pre>
+<p><code>n+0</code> prints 0 instead of an empty string when nothing matched.</p>
+<h3>Variables, printf, and -v</h3>
+<p>awk variables need no declaration. Unset variables are 0 as numbers and empty as strings. <code>-v</code> passes a shell value into awk, which is safer than splicing <code>$var</code> into a single-quoted program:</p>
+<pre class="code-block"><code>$ awk -v ip=203.0.113.7 '$0 ~ ip {n++} END{print ip, n}' sample-secure.log
+203.0.113.7 3
+$ awk '/Failed/ {f++} /Accepted/ {a++} END {printf &quot;failed=%d accepted=%d rate=%.1f%%\n&quot;, f, a, f*100/(f+a)}' sample-secure.log
+failed=7 accepted=2 rate=77.8%
+</code></pre>
+<p><code>printf</code> uses C formats: <code>%s</code> string, <code>%d</code> integer, <code>%.1f</code> decimal, <code>%-15s</code> left-aligned width 15, <code>%5d</code> right-aligned width 5, and <code>%%</code> for a literal percent sign. Unlike <code>print</code>, it adds no newline.</p>
+<h3>Associative arrays</h3>
+<p>awk arrays are indexed by strings, which makes counting and grouping easy:</p>
+<pre class="code-block"><code>$ awk '/Failed/ {c[$(NF-3)]++} END {for (k in c) printf &quot;%-15s %d\n&quot;, k, c[k]}' sample-secure.log | sort -k2,2nr
+192.168.1.50    3
+203.0.113.7     3
+192.168.1.10    1
+$ awk '{split($3, t, &quot;:&quot;); h[t[1]&quot;:&quot;t[2]]++} END{for(k in h) print k, h[k]}' sample-secure.log | sort
+08:01 2
+08:02 1
+08:03 3
+08:05 1
+08:06 2
+08:07 1
+</code></pre>
+<ul>
+<li>The first example counts back from the end of the line with <code>$(NF-3)</code>, so <code>invalid user</code> doesn't affect it. That is a second fix for the field shift.</li>
+<li><code>for (k in a)</code> visits keys in no fixed order. Pipe to <code>sort</code> when order matters.</li>
+<li><code>(k in a)</code> tests whether a key exists without creating it, and <code>delete a[k]</code> removes an element.</li>
+<li>A subscript like <code>seen[ip, user]</code> joins both values into one key with <code>SUBSEP</code>. <code>!seen[key]++</code> is the classic dedupe idiom: it is true only the first time a key appears.</li>
+</ul>
+<h3>Built-in functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>length(s)</code></td>
+<td>length</td>
+</tr>
+<tr>
+<td><code>substr(s, start, len)</code></td>
+<td>substring, 1-based</td>
+</tr>
+<tr>
+<td><code>index(s, t)</code></td>
+<td>position of t in s</td>
+</tr>
+<tr>
+<td><code>split(s, arr, sep)</code></td>
+<td>split into an array; returns the element count</td>
+</tr>
+<tr>
+<td><code>sub(re, repl, target)</code></td>
+<td>replace the first match; defaults to <code>$0</code></td>
+</tr>
+<tr>
+<td><code>gsub(re, repl, target)</code></td>
+<td>replace every match</td>
+</tr>
+<tr>
+<td><code>match(s, re)</code></td>
+<td>sets <code>RSTART</code> and <code>RLENGTH</code></td>
+</tr>
+<tr>
+<td><code>tolower(s)</code> / <code>toupper(s)</code></td>
+<td>change case</td>
+</tr>
+<tr>
+<td><code>sprintf(fmt, ...)</code></td>
+<td>format and return a string</td>
+</tr>
+<tr>
+<td><code>system(cmd)</code></td>
+<td>run a shell command</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ awk '/sudo/ {sub(/.*COMMAND=/, &quot;&quot;); print}' sample-secure.log
+/usr/bin/dnf update
+$ awk '{gsub(/[0-9]+/, &quot;N&quot;, $5); print $5}' sample-secure.log | sort | uniq -c
+      9 sshd[N]:
+      1 sudo[N]:
+$ awk 'match($0, /port [0-9]+/) {print substr($0, RSTART+5, RLENGTH-5)}' sample-secure.log | head -3
+50122
+50122
+50200
+$ awk 'BEGIN{n=split(&quot;a,b,c&quot;, p, &quot;,&quot;); print n, p[2]}'
+3 b
+</code></pre>
+<h3>User-defined functions</h3>
+<pre class="code-block"><code>$ awk 'function ipclass(ip) { return (ip ~ /^(10|192\.168)\./) ? &quot;private&quot; : &quot;public&quot; }
+       /from/ {print $(NF-3), ipclass($(NF-3))}' sample-secure.log | sort -u
+10.0.0.5 private
+192.168.1.10 private
+192.168.1.50 private
+203.0.113.7 public
+</code></pre>
+<h3>Several files: NR==FNR</h3>
+<p>While awk reads the first file, <code>NR</code> equals <code>FNR</code>. That lets you load a lookup table into an array first and then process the second file, which amounts to a join between two files:</p>
+<pre class="code-block"><code>$ printf '192.168.1.50 lab-gateway\n203.0.113.7 external-scanner\n' &gt; known-hosts.txt
+$ awk 'NR==FNR {name[$1]=$2; next}
+       /Failed/ {ip=$(NF-3); print ip, (ip in name ? name[ip] : &quot;unknown&quot;)}' \
+      known-hosts.txt sample-secure.log | sort | uniq -c
+      1 192.168.1.10 unknown
+      3 192.168.1.50 lab-gateway
+      3 203.0.113.7 external-scanner
+</code></pre>
+<p><code>next</code> moves straight to the next record and skips the remaining rules.</p>
+<h3>Changing the record separator</h3>
+<p><code>RS=""</code> turns on paragraph mode, where blank lines separate records. With <code>FS="\n"</code>, each line becomes a field:</p>
+<pre class="code-block"><code>$ printf 'name: a\nage: 1\n\nname: b\nage: 2\n' | awk 'BEGIN{RS=&quot;&quot;; FS=&quot;\n&quot;} {print NR&quot;: &quot;$1&quot; / &quot;$2}'
+1: name: a / age: 1
+2: name: b / age: 2
+</code></pre>
+<h3>getline</h3>
+<p><code>getline</code> reads input on demand. It is mostly used in BEGIN blocks to read another file or a command's output:</p>
+<pre class="code-block"><code>awk 'BEGIN { while ((getline line &lt; &quot;known-hosts.txt&quot;) &gt; 0) n++; print n }'   # prints 2
+awk 'BEGIN { &quot;date +%Y&quot; | getline y; close(&quot;date +%Y&quot;); print &quot;year:&quot;, y }'
+</code></pre>
+<p><code>getline</code> returns 1 on success, 0 at end of input, and -1 on error. Write the loop condition as <code>&gt; 0</code> so a missing file doesn't cause an infinite loop, and call <code>close()</code> when you are done with a command or file. In most cases <code>NR==FNR</code> is simpler.</p>
+<h3>In the script: count and format the report</h3>
+<pre class="code-block"><code>report=$(awk -v limit=&quot;$threshold&quot; '
+    {
+        ip = $11; user = $9
+        fails[ip]++
+        if (!seen[ip, user]++)
+            users[ip] = users[ip] (users[ip] ? &quot;,&quot; : &quot;&quot;) user
+    }
+    END {
+        for (ip in fails)
+            printf &quot;%-15s %5d  %-20s %s\n&quot;, ip, fails[ip], users[ip],
+                   (fails[ip] &gt;= limit ? &quot;ALERT&quot; : &quot;ok&quot;)
+    }' &lt;&lt;&lt; &quot;$failed&quot; | sort -k2,2nr -k1,1)
+</code></pre>
+<ul>
+<li><code>-v limit=</code> passes the shell's threshold into awk.</li>
+<li><code>fails[ip]++</code> counts per IP. <code>seen[ip, user]</code> dedupes user names per IP, and <code>users[ip]</code> joins them with commas.</li>
+<li>In awk, writing two strings side by side concatenates them. The ternary <code>cond ? a : b</code> picks the status.</li>
+<li><code>sort -k2,2nr -k1,1</code> sorts by column 2 numerically in descending order, then by IP, so the output is stable.</li>
+</ul>
+          </section>
+          <section id="full-script">
+<h2>The complete script</h2>
+<pre class="code-block"><code>#!/bin/bash
+# log-audit.sh - summarize SSH login activity from secure-style logs
+set -euo pipefail
+
+usage() {
+    echo &quot;Usage: $(basename &quot;$0&quot;) LOGFILE...&quot; &gt;&amp;2
+    echo &quot;Env:   THRESHOLD=N (default 3)  OUTPUT=FILE (write report to FILE)&quot; &gt;&amp;2
+    exit 1
+}
+
+[ $# -ge 1 ] || usage
+threshold=${THRESHOLD:-3}
+[[ $threshold =~ ^[0-9]+$ ]] || { echo &quot;error: THRESHOLD must be a number&quot; &gt;&amp;2; exit 1; }
+
+for file in &quot;$@&quot;; do
+    if [ ! -r &quot;$file&quot; ]; then
+        echo &quot;error: cannot read $file&quot; &gt;&amp;2
+        exit 1
+    fi
+done
+
+if [ -n &quot;${OUTPUT:-}&quot; ]; then
+    exec &gt; &quot;$OUTPUT&quot;
+fi
+
+failed=$(grep -hE 'sshd\[[0-9]+\]: Failed password' &quot;$@&quot; \
+    | sed -E 's/ for invalid user / for /' || true)
+accepted=$(grep -hE 'sshd\[[0-9]+\]: Accepted ' &quot;$@&quot; || true)
+
+if [ -z &quot;$failed&quot; ]; then
+    failed_total=0
+else
+    failed_total=$(wc -l &lt;&lt;&lt; &quot;$failed&quot;)
+fi
+
+echo &quot;== SSH audit: $# file(s), threshold=$threshold ==&quot;
+echo &quot;Failed attempts: $failed_total&quot;
+echo
+echo &quot;-- Failed logins by source IP --&quot;
+printf '%-15s %5s  %-20s %s\n' &quot;IP&quot; &quot;FAILS&quot; &quot;USERS&quot; &quot;STATUS&quot;
+
+report=&quot;&quot;
+if [ &quot;$failed_total&quot; -gt 0 ]; then
+    report=$(awk -v limit=&quot;$threshold&quot; '
+        {
+            ip = $11; user = $9
+            fails[ip]++
+            if (!seen[ip, user]++)
+                users[ip] = users[ip] (users[ip] ? &quot;,&quot; : &quot;&quot;) user
+        }
+        END {
+            for (ip in fails)
+                printf &quot;%-15s %5d  %-20s %s\n&quot;, ip, fails[ip], users[ip],
+                       (fails[ip] &gt;= limit ? &quot;ALERT&quot; : &quot;ok&quot;)
+        }' &lt;&lt;&lt; &quot;$failed&quot; | sort -k2,2nr -k1,1)
+    echo &quot;$report&quot;
+fi
+
+echo
+echo &quot;-- Successful logins --&quot;
+if [ -n &quot;$accepted&quot; ]; then
+    awk '{ print $9, $11, $7 }' &lt;&lt;&lt; &quot;$accepted&quot; | sort | uniq -c |
+    while read -r count user ip method; do
+        printf '%-10s from %-15s via %-9s x%d\n' &quot;$user&quot; &quot;$ip&quot; &quot;$method&quot; &quot;$count&quot;
+    done
+else
+    echo &quot;(none)&quot;
+fi
+
+alerts=$(grep -c 'ALERT$' &lt;&lt;&lt; &quot;$report&quot; || true)
+if [ &quot;$alerts&quot; -gt 0 ]; then
+    echo &quot;$alerts source(s) reached the threshold&quot; &gt;&amp;2
+    exit 2
+fi
+exit 0
+</code></pre>
+<h3>Runs and exit codes</h3>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Command</th>
+<th>Exit code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A source reached the threshold</td>
+<td><code>./log-audit.sh sample-secure.log</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>Higher threshold, no alert</td>
+<td><code>THRESHOLD=5 ./log-audit.sh sample-secure.log</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td>No arguments</td>
+<td><code>./log-audit.sh</code></td>
+<td>1, usage on stderr</td>
+</tr>
+<tr>
+<td>Unreadable file</td>
+<td><code>./log-audit.sh nope.log</code></td>
+<td>1, <code>error: cannot read nope.log</code></td>
+</tr>
+<tr>
+<td>Threshold is not a number</td>
+<td><code>THRESHOLD=x ./log-audit.sh sample-secure.log</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>Report to a file</td>
+<td><code>OUTPUT=report.txt ./log-audit.sh sample-secure.log</code></td>
+<td>2; the alert notice still reaches the terminal</td>
+</tr>
+</tbody>
+</table>
+<p>The alert notice goes to stderr, so with <code>OUTPUT=report.txt</code> the report lands in the file and the notice stays on the terminal. From cron, you could use:</p>
+<pre class="code-block"><code>./log-audit.sh /var/log/secure &gt; /tmp/audit.txt 2&gt;&amp;1 || [ $? -ne 2 ] || mail -s &quot;SSH alert&quot; root &lt; /tmp/audit.txt
+</code></pre>
+<h3>Ideas for further practice</h3>
+<ul>
+<li>Add a <code>-t N</code> command-line option instead of the environment variable (with <code>getopts</code>).</li>
+<li>Read rotated <code>/var/log/secure-*</code> files, or take input from <code>journalctl -u sshd</code>.</li>
+<li>Load an IP allowlist with <code>NR==FNR</code> and skip alerts for listed addresses.</li>
+</ul>
+          </section>
+          <section id="cheatsheet">
+<h2>Cheat sheet</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stdout and stderr to a file</td>
+<td><code>cmd &gt; file 2&gt;&amp;1</code> or <code>cmd &amp;&gt; file</code></td>
+</tr>
+<tr>
+<td>discard errors</td>
+<td><code>cmd 2&gt;/dev/null</code></td>
+</tr>
+<tr>
+<td>error message to stderr</td>
+<td><code>echo "error" &gt;&amp;2</code></td>
+</tr>
+<tr>
+<td>save and pass along</td>
+<td><code>cmd \| tee file \| next</code></td>
+</tr>
+<tr>
+<td>stdin to arguments</td>
+<td><code>... \| xargs -I {} cmd {}</code></td>
+</tr>
+<tr>
+<td>default value</td>
+<td><code>${VAR:-default}</code></td>
+</tr>
+<tr>
+<td>loop over all arguments</td>
+<td><code>for a in "$@"</code></td>
+</tr>
+<tr>
+<td>read a file by line</td>
+<td><code>while read -r line; do ...; done &lt; file</code></td>
+</tr>
+<tr>
+<td>integer math</td>
+<td><code>$(( a * 3 ))</code>, <code>(( a &gt; b ))</code></td>
+</tr>
+<tr>
+<td>regex test</td>
+<td><code>[[ $s =~ ^[0-9]+$ ]]</code></td>
+</tr>
+<tr>
+<td>silent match test</td>
+<td><code>if grep -q pat file</code></td>
+</tr>
+<tr>
+<td>only the matched part</td>
+<td><code>grep -oE 'pat'</code></td>
+</tr>
+<tr>
+<td>print line N</td>
+<td><code>sed -n 'Np'</code></td>
+</tr>
+<tr>
+<td>replace all, with backup</td>
+<td><code>sed -i.bak 's/old/new/g' file</code></td>
+</tr>
+<tr>
+<td>delete matching lines</td>
+<td><code>sed '/pat/d'</code></td>
+</tr>
+<tr>
+<td>print a range</td>
+<td><code>sed -n '/start/,/end/p'</code></td>
+</tr>
+<tr>
+<td>reverse lines</td>
+<td><code>sed -n '1!G;h;$p'</code></td>
+</tr>
+<tr>
+<td>print some columns</td>
+<td><code>awk '{print $1, $NF}'</code></td>
+</tr>
+<tr>
+<td>set the separator</td>
+<td><code>awk -F: '{print $1}'</code></td>
+</tr>
+<tr>
+<td>count by group</td>
+<td><code>awk '{c[$1]++} END {for (k in c) print k, c[k]}'</code></td>
+</tr>
+<tr>
+<td>dedupe, keep order</td>
+<td><code>awk '!seen[$0]++'</code></td>
+</tr>
+<tr>
+<td>pass a shell variable</td>
+<td><code>awk -v n="$n" '$3 &gt; n'</code></td>
+</tr>
+<tr>
+<td>join two files</td>
+<td><code>awk 'NR==FNR {m[$1]=$2; next} {print $0, m[$1]}' a b</code></td>
+</tr>
+<tr>
+<td>rank by count</td>
+<td><code>... \| sort \| uniq -c \| sort -rn</code></td>
+</tr>
+</tbody>
+</table>
+          </section>
+        </article>
+
+        <aside class="kb-toc" aria-label="On this page" data-i18n-attr="aria-label:notes.tocLabel">
+          <p class="kb-label" data-i18n="notes.tocLabel">On this page</p>
+          <ul>
+            <li><a href="#goal">Goal and sample data</a></li>
+            <li><a href="#first-script">The first script</a></li>
+            <li><a href="#io">I/O channels and redirection</a></li>
+            <li><a href="#pipes">Pipes, tee, and xargs</a></li>
+            <li><a href="#variables">Variables, quoting, and the environment</a></li>
+            <li><a href="#args-exit">Arguments, exit codes, and exec</a></li>
+            <li><a href="#tests">Tests and conditionals</a></li>
+            <li><a href="#loops">Loops</a></li>
+            <li><a href="#grep-regex">Regular expressions and grep</a></li>
+            <li><a href="#sed">sed in depth</a></li>
+            <li><a href="#awk">awk in depth</a></li>
+            <li><a href="#full-script">The complete script</a></li>
+            <li><a href="#cheatsheet">Cheat sheet</a></li>
+          </ul>
+          <a class="text-link" href="https://github.com/hzhan516/hzhan516.github.io" target="_blank" rel="noreferrer" data-i18n="notes.editSource">Edit on GitHub ↗</a>
+        </aside>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>&copy; <span data-year></span> <span data-i18n="common.name">Hansheng Zhang (Doyle)</span>.</p>
+        <div class="footer-links">
+          <a href="mailto:doyle_zhang@outlook.com" data-i18n="common.footerEmail">doyle_zhang@outlook.com</a>
+          <a href="../index.html" data-i18n="common.footerHome">Home</a>
+          <a href="../resume.html" data-i18n="common.footerResume">Resume</a>
+          <a href="https://github.com/hzhan516/medmemo" target="_blank" rel="noreferrer" data-i18n="common.footerMedMemoGitHub">MedMemo GitHub</a>
+          <a href="https://github.com/hzhan516/JobCopilot" target="_blank" rel="noreferrer" data-i18n="common.footerJobCopilotGitHub">JobCopilot GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

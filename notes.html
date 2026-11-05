@@ -70,7 +70,7 @@
           <details class="kb-group" open>
             <summary data-i18n="notes.cat_linux">Linux & System</summary>
             <ul class="kb-nav" data-category="linux">
-              <li class="kb-empty" data-i18n="notes.emptyCategory">No notes yet</li>
+              <li><a href="./notes/bash-scripting-text-processing.html" data-i18n="notes.bashTitle" data-i18n-attr="href:notes.bashHref">Bash Scripting and Text Processing</a></li>
             </ul>
           </details>
           <details class="kb-group" open>
@@ -105,7 +105,7 @@
             <ol class="step-list">
               <li><div><strong data-i18n="notes.cat_ai">AI Engineering</strong><span data-i18n="notes.emptyCategory">No notes yet</span></div></li>
               <li><div><strong data-i18n="notes.cat_backend">Backend Engineering</strong><span data-i18n="notes.emptyCategory">No notes yet</span></div></li>
-              <li><div><strong data-i18n="notes.cat_linux">Linux & System</strong><span data-i18n="notes.emptyCategory">No notes yet</span></div></li>
+              <li><div><strong data-i18n="notes.cat_linux">Linux & System</strong><span><a class="text-link" href="./notes/bash-scripting-text-processing.html" data-i18n="notes.bashTitle" data-i18n-attr="href:notes.bashHref">Bash Scripting and Text Processing</a></span></div></li>
               <li><div><strong data-i18n="notes.cat_cloud">Cloud & DevOps</strong><span data-i18n="notes.emptyCategory">No notes yet</span></div></li>
               <li><div><strong data-i18n="notes.cat_workflow">Engineering Workflow</strong><span data-i18n="notes.emptyCategory">No notes yet</span></div></li>
             </ol>
@@ -113,9 +113,15 @@
 
           <section id="recent" aria-labelledby="recent-heading">
             <h2 id="recent-heading" data-i18n="notes.recentTitle">Recently updated</h2>
-            <div class="empty-state" data-notes-list>
-              <strong data-i18n="notes.emptyTitle">Notes are on the way</strong>
-              <p data-i18n="notes.emptyBody">The first notes will appear here once they are published.</p>
+            <div class="route-grid" data-notes-list>
+              <article class="route-card post-card">
+                <div>
+                  <p class="eyebrow" data-i18n="notes.cat_linux">Linux & System</p>
+                  <h3 data-i18n="notes.bashTitle">Bash Scripting and Text Processing</h3>
+                </div>
+                <p data-i18n="notes.bashSummary">Redirection, pipes, conditionals, regular expressions, grep, sed, and awk, learned by building one SSH log audit script.</p>
+                <a class="text-link" href="./notes/bash-scripting-text-processing.html" data-i18n="notes.readNote" data-i18n-attr="href:notes.bashHref">Read note →</a>
+              </article>
             </div>
           </section>
         </article>

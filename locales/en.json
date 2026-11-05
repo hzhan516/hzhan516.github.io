@@ -253,7 +253,11 @@
     "emptyBody": "The first notes will appear here once they are published.",
     "tocLabel": "On this page",
     "viewSource": "View on GitHub ↗",
-    "editSource": "Edit on GitHub ↗"
+    "editSource": "Edit on GitHub ↗",
+    "readNote": "Read note →",
+    "bashTitle": "Bash Scripting and Text Processing",
+    "bashSummary": "Redirection, pipes, conditionals, regular expressions, grep, sed, and awk, learned by building one SSH log audit script.",
+    "bashHref": "./notes/bash-scripting-text-processing.html"
   },
   "writing": {
     "eyebrow": "Writing",

@@ -85,11 +85,14 @@ const profile = {
             <a class="text-link" href="./notes.html" data-i18n="index.notebookAll">All notes →</a>
           </div>
           <div class="route-grid" data-notes-list>
-            <div class="empty-state">
-              <strong data-i18n="notes.emptyTitle">Notes are on the way</strong>
-              <p data-i18n="notes.emptyBody">The first notes will appear here once they are published.</p>
-              <a class="text-link" href="./writing.html" data-i18n="index.notebookWriting">Read the writing page →</a>
-            </div>
+            <article class="route-card post-card">
+              <div>
+                <p class="eyebrow" data-i18n="notes.cat_linux">Linux & System</p>
+                <h3 data-i18n="notes.bashTitle">Bash Scripting and Text Processing</h3>
+              </div>
+              <p data-i18n="notes.bashSummary">Redirection, pipes, conditionals, regular expressions, grep, sed, and awk, learned by building one SSH log audit script.</p>
+              <a class="text-link" href="./notes/bash-scripting-text-processing.html" data-i18n="notes.readNote" data-i18n-attr="href:notes.bashHref">Read note →</a>
+            </article>
           </div>
         </div>
       </section>

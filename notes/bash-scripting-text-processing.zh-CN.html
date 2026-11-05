@@ -1,0 +1,1655 @@
+<!doctype html>
+<html lang="zh-Hans-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="以一个 SSH 日志巡检脚本为主线，逐步讲解重定向、管道、变量、条件与循环、正则表达式、grep、sed 和 awk。">
+    <title>Bash 脚本与文本处理：从零构建日志巡检脚本 | Notes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../script.js" defer></script>
+    <style>
+      .kb-article table { width: 100%; border-collapse: collapse; font-size: 0.86rem; display: block; overflow-x: auto; }
+      .kb-article th, .kb-article td { padding: 0.45rem 0.7rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+      .kb-article th { background: var(--mint); }
+      .kb-article :not(pre) > code { font-family: var(--font-mono); font-size: 0.85em; padding: 0.1em 0.35em; border-radius: 4px; background: var(--mint); }
+      .kb-article section > h3 { margin-top: var(--space-5); font-size: 1.05rem; }
+      .kb-article section ul, .kb-article section ol:not(.step-list) { padding-left: 1.25rem; color: var(--ink-soft); }
+      .kb-article .code-block { line-height: 1.6; white-space: pre; }
+      .kb-lang-switch { margin-top: var(--space-3); font-size: 0.85rem; }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="common.skip">Skip to content</a>
+    <header class="site-header">
+      <div class="nav-wrap">
+        <a class="brand" href="../index.html" aria-label="Hansheng Zhang (Doyle) home" data-i18n-attr="aria-label:common.homeAria">
+          <span class="brand-mark">HZ</span>
+          <span class="brand-name">
+            <span data-i18n="common.name">Hansheng Zhang (Doyle)</span>
+            <small data-i18n="common.siteDescription">AI systems portfolio</small>
+          </span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu" data-i18n-attr="aria-label:common.menuToggle">
+          <span class="nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <div class="nav-menu" id="nav-menu">
+          <nav class="site-nav" aria-label="Primary navigation" data-i18n-attr="aria-label:common.navAria">
+            <a data-nav href="../index.html" data-i18n="common.navHome">Home</a>
+            <a data-nav data-nav-section="notes" href="../notes.html" data-i18n="common.navNotes">Notes</a>
+            <a data-nav data-nav-section="writing" href="../writing.html" data-i18n="common.navWriting">Writing</a>
+            <a data-nav href="../resume.html" data-i18n="common.navResume">Resume</a>
+            <a data-nav href="../medmemo.html" data-i18n="common.navMedMemo">MedMemo</a>
+            <a data-nav href="../jobcopilot.html" data-i18n="common.navJobCopilot">JobCopilot</a>
+            <a href="https://github.com/hzhan516" target="_blank" rel="noreferrer" data-i18n="common.navGitHub">GitHub</a>
+          </nav>
+          <div class="lang-switcher" aria-label="Language selector" data-i18n-attr="aria-label:common.languageSelector">
+            <button type="button" data-lang-option="en" data-i18n="common.languageEnglish">EN</button>
+            <button type="button" data-lang-option="zh-CN" data-i18n="common.languageChinese">简中</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="kb-layout">
+        <aside class="kb-sidebar" aria-label="Knowledge base navigation" data-i18n-attr="aria-label:notes.sidebarAria">
+          <div class="kb-search">
+            <label class="kb-label" for="kb-search" data-i18n="notes.searchLabel">Search notes</label>
+            <input id="kb-search" type="search" placeholder="Search the knowledge base…" data-kb-search data-i18n-attr="placeholder:notes.searchPlaceholder">
+          </div>
+          <div>
+            <p class="kb-label" data-i18n="notes.library">Library</p>
+            <ul class="kb-nav">
+              <li><a href="../notes.html" data-i18n="notes.overview">Overview</a></li>
+            </ul>
+          </div>
+          <details class="kb-group" open>
+            <summary data-i18n="notes.cat_ai">AI Engineering</summary>
+            <ul class="kb-nav" data-category="ai">
+              <li class="kb-empty" data-i18n="notes.emptyCategory">No notes yet</li>
+            </ul>
+          </details>
+          <details class="kb-group" open>
+            <summary data-i18n="notes.cat_backend">Backend Engineering</summary>
+            <ul class="kb-nav" data-category="backend">
+              <li class="kb-empty" data-i18n="notes.emptyCategory">No notes yet</li>
+            </ul>
+          </details>
+          <details class="kb-group" open>
+            <summary data-i18n="notes.cat_linux">Linux & System</summary>
+            <ul class="kb-nav" data-category="linux">
+              <li><a href="./bash-scripting-text-processing.zh-CN.html" aria-current="page">Bash 脚本与文本处理</a></li>
+            </ul>
+          </details>
+          <details class="kb-group" open>
+            <summary data-i18n="notes.cat_cloud">Cloud & DevOps</summary>
+            <ul class="kb-nav" data-category="cloud">
+              <li class="kb-empty" data-i18n="notes.emptyCategory">No notes yet</li>
+            </ul>
+          </details>
+          <details class="kb-group" open>
+            <summary data-i18n="notes.cat_workflow">Engineering Workflow</summary>
+            <ul class="kb-nav" data-category="workflow">
+              <li class="kb-empty" data-i18n="notes.emptyCategory">No notes yet</li>
+            </ul>
+          </details>
+
+          <div class="kb-card">
+            <strong data-i18n="notes.cardTitle">Notes as code</strong>
+            <p data-i18n="notes.cardBody">Written in HTML, versioned in Git, published with GitHub Pages.</p>
+          </div>
+        </aside>
+
+        <article class="kb-article">
+          <p class="breadcrumb">笔记 / Linux 与系统 / Bash</p>
+          <h1>Bash 脚本与文本处理：从零构建日志巡检脚本</h1>
+          <p class="lead">以一个 SSH 日志巡检脚本为主线，逐步讲解重定向、管道、变量、条件与循环、正则表达式、grep、sed 和 awk。</p>
+          <div class="kb-meta">
+            <span class="tag">Linux 与系统</span>
+            <span>约 40 分钟</span>
+            <span>·</span>
+            <time datetime="2026-11-05">更新于 2026 年 11 月</time>
+          </div>
+          <p class="kb-lang-switch"><a class="text-link" href="./bash-scripting-text-processing.html" hreflang="en">English →</a></p>
+
+          <section id="goal">
+<h2>目标与样例数据</h2>
+<p>这篇笔记从零写一个 <code>log-audit.sh</code>：读取 RHEL 风格的 SSH 安全日志（<code>/var/log/secure</code>），统计失败登录、按来源 IP 汇总、列出成功登录，并用退出码告诉调用者是否需要告警。每一节引入一个知识点，脚本随之迭代，最后给出完整版本。</p>
+<p>先用 heredoc（here document，后面会讲）在当前目录生成一份样例日志。下文所有输出都来自这份数据的实际运行结果。</p>
+<pre class="code-block"><code>mkdir -p ~/log-audit &amp;&amp; cd ~/log-audit
+cat &gt; sample-secure.log &lt;&lt;'EOF'
+Nov  5 08:01:12 servera sshd[1201]: Failed password for root from 192.168.1.50 port 50122 ssh2
+Nov  5 08:01:15 servera sshd[1201]: Failed password for root from 192.168.1.50 port 50122 ssh2
+Nov  5 08:02:03 servera sshd[1210]: Accepted password for student from 192.168.1.10 port 50200 ssh2
+Nov  5 08:03:44 servera sshd[1222]: Failed password for invalid user admin from 203.0.113.7 port 41000 ssh2
+Nov  5 08:03:47 servera sshd[1222]: Failed password for invalid user admin from 203.0.113.7 port 41000 ssh2
+Nov  5 08:03:50 servera sshd[1222]: Failed password for invalid user test from 203.0.113.7 port 41002 ssh2
+Nov  5 08:05:10 servera sudo[1300]:  student : TTY=pts/0 ; PWD=/home/student ; USER=root ; COMMAND=/usr/bin/dnf update
+Nov  5 08:06:21 servera sshd[1310]: Failed password for student from 192.168.1.10 port 50300 ssh2
+Nov  5 08:06:30 servera sshd[1311]: Accepted publickey for operator from 10.0.0.5 port 52000 ssh2
+Nov  5 08:07:02 servera sshd[1320]: Failed password for root from 192.168.1.50 port 50400 ssh2
+EOF
+</code></pre>
+<p>最终脚本的输出是这样的：</p>
+<pre class="code-block"><code>$ ./log-audit.sh sample-secure.log
+== SSH audit: 1 file(s), threshold=3 ==
+Failed attempts: 7
+
+-- Failed logins by source IP --
+IP              FAILS  USERS                STATUS
+192.168.1.50        3  root                 ALERT
+203.0.113.7         3  admin,test           ALERT
+192.168.1.10        1  student              ok
+
+-- Successful logins --
+operator   from 10.0.0.5        via publickey x1
+student    from 192.168.1.10    via password  x1
+2 source(s) reached the threshold
+$ echo $?
+2
+</code></pre>
+<div class="notice"><strong>真实环境</strong><p>在 RHEL 上读取 <code>/var/log/secure</code> 需要 root 权限，例如 <code>sudo ./log-audit.sh /var/log/secure</code>。练习时使用样例文件即可。</p></div>
+          </section>
+          <section id="first-script">
+<h2>第一个脚本：shebang、执行权限与调试</h2>
+<p>Shell 脚本就是一个按顺序执行命令的文本文件。把重复的命令行操作写进脚本，可以减少手工输入错误，也便于复用和审查。</p>
+<h3>shebang</h3>
+<p>脚本第一行以 <code>#!</code> 开头，称为 shebang（也叫 hash-bang，<code>#</code> 读作 sharp 或 hash）。内核执行文件时读取这一行，用其中指定的解释器运行脚本：</p>
+<pre class="code-block"><code>#!/bin/bash
+echo &quot;log-audit: starting&quot;
+</code></pre>
+<ul>
+<li>shebang 指定的解释器路径必须存在，否则会报 <code>bad interpreter: No such file or directory</code>。</li>
+<li>如果省略 shebang，结果取决于调用方式：从 Bash 中执行时，Bash 通常会用一个新的 Bash 子进程来运行它；其他程序调用时可能直接失败。所以始终写上 shebang。</li>
+<li>需要在不同系统间移植时，也可以写 <code>#!/usr/bin/env bash</code>，从 <code>PATH</code> 中查找 bash。</li>
+</ul>
+<h3>执行权限与运行方式</h3>
+<pre class="code-block"><code>chmod +x log-audit.sh      # 添加执行权限
+./log-audit.sh             # 在当前目录运行，需要执行权限，按 shebang 选解释器
+bash log-audit.sh          # 显式调用 bash 解释，不需要执行权限，忽略 shebang
+~/log-audit/log-audit.sh   # 使用绝对路径
+</code></pre>
+<p>Shell 只在 <code>PATH</code> 列出的目录中查找命令，当前目录默认不在其中，所以必须写 <code>./</code>。如果把脚本放进 <code>~/bin</code> 或 <code>/usr/local/bin</code>（都在 RHEL 的默认 <code>PATH</code> 里），就能直接输入脚本名运行。</p>
+<p><code>./script</code> 和 <code>bash script</code> 都会启动一个子进程运行脚本，脚本内设置的变量不会影响当前 shell。<code>source script</code>（或 <code>. script</code>）则在当前 shell 中执行，常用于加载配置。</p>
+<h3>调试与安全选项</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bash -n script</code></td>
+<td>只检查语法，不执行</td>
+</tr>
+<tr>
+<td><code>bash -x script</code> 或脚本中写 <code>set -x</code></td>
+<td>执行前把每条展开后的命令打印到标准错误，行首带 <code>+</code></td>
+</tr>
+<tr>
+<td><code>set +x</code></td>
+<td>关闭跟踪</td>
+</tr>
+<tr>
+<td><code>set -e</code></td>
+<td>任何命令返回非零退出码时立即退出脚本</td>
+</tr>
+<tr>
+<td><code>set -u</code></td>
+<td>引用未定义的变量时报错退出</td>
+</tr>
+<tr>
+<td><code>set -o pipefail</code></td>
+<td>管道中任一命令失败，整个管道就返回失败</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ bash -xc 'n=2; echo $((n*2))'
++ n=2
++ echo 4
+4
+</code></pre>
+<p><code>log-audit.sh</code> 在 shebang 后写 <code>set -euo pipefail</code>，让错误尽早暴露。代价是：确实可能“失败”的命令（例如 grep 没有匹配时返回 1）需要用 <code>|| true</code> 显式放行。</p>
+          </section>
+          <section id="io">
+<h2>I/O 通道与重定向</h2>
+<p>每个进程启动时至少有三个文件描述符（file descriptor，简称 fd）：</p>
+<table>
+<thead>
+<tr>
+<th>fd</th>
+<th>名称</th>
+<th>默认连接</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>标准输入 stdin</td>
+<td>键盘</td>
+<td>只读</td>
+</tr>
+<tr>
+<td>1</td>
+<td>标准输出 stdout</td>
+<td>终端</td>
+<td>只写，输出正常结果</td>
+</tr>
+<tr>
+<td>2</td>
+<td>标准错误 stderr</td>
+<td>终端</td>
+<td>只写，输出错误和诊断信息</td>
+</tr>
+<tr>
+<td>3+</td>
+<td>其他文件</td>
+<td>无</td>
+<td>由程序打开的文件</td>
+</tr>
+</tbody>
+</table>
+<p>重定向改变这些通道的连接对象，让进程从文件读，或者写到文件，而不是终端。</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&gt; file</code></td>
+<td>stdout 覆盖写入文件</td>
+</tr>
+<tr>
+<td><code>&gt;&gt; file</code></td>
+<td>stdout 追加到文件</td>
+</tr>
+<tr>
+<td><code>2&gt; file</code></td>
+<td>stderr 覆盖写入文件</td>
+</tr>
+<tr>
+<td><code>2&gt;/dev/null</code></td>
+<td>丢弃 stderr</td>
+</tr>
+<tr>
+<td><code>&gt; file 2&gt;&amp;1</code> 或 <code>&amp;&gt; file</code></td>
+<td>stdout 和 stderr 都覆盖写入文件</td>
+</tr>
+<tr>
+<td><code>&gt;&gt; file 2&gt;&amp;1</code> 或 <code>&amp;&gt;&gt; file</code></td>
+<td>stdout 和 stderr 都追加到文件</td>
+</tr>
+<tr>
+<td><code>&lt; file</code></td>
+<td>从文件读取 stdin</td>
+</tr>
+<tr>
+<td><code>&gt;&amp;2</code></td>
+<td>把这条命令的 stdout 送到 stderr</td>
+</tr>
+</tbody>
+</table>
+<h3>顺序很重要</h3>
+<p>Bash 从左到右处理重定向。<code>2&gt;&amp;1</code> 的意思是“让 fd 2 指向 fd 1 <strong>此刻</strong>指向的地方”：</p>
+<pre class="code-block"><code>$ ls /etc/hostname /nope &gt; out.txt 2&gt;&amp;1; cat out.txt
+ls: cannot access '/nope': No such file or directory
+/etc/hostname
+
+$ ls /etc/hostname /nope 2&gt;&amp;1 &gt; out.txt; echo '--file:'; cat out.txt
+ls: cannot access '/nope': No such file or directory
+--file:
+/etc/hostname
+</code></pre>
+<p>第一条先把 stdout 指向文件，再让 stderr 跟过去，所以两者都进了文件。第二条先让 stderr 指向 stdout 当时的位置（终端），之后才把 stdout 改到文件，所以错误仍然显示在终端上。</p>
+<h3>脚本中的错误信息</h3>
+<p>除非命令本身报错，脚本里 <code>echo</code> 的内容都走 stdout。用法说明和错误提示应该写到 stderr，这样用户把报告重定向到文件时，错误不会混进报告，也不会被管道下游当成数据：</p>
+<pre class="code-block"><code>usage() {
+    echo &quot;Usage: $(basename &quot;$0&quot;) LOGFILE...&quot; &gt;&amp;2
+    exit 1
+}
+</code></pre>
+<h3>heredoc</h3>
+<p><code>&lt;&lt;'EOF'</code> 到单独一行的 <code>EOF</code> 之间的文本会作为命令的 stdin，适合生成文件或多行输入。分隔符加了引号时，正文中的 <code>$变量</code> 不会展开；不加引号则会展开：</p>
+<pre class="code-block"><code>$ cat &lt;&lt;EOF
+user: $USER-ish
+EOF
+user: doyle-ish
+</code></pre>
+<p>另一种形式 <code>&lt;&lt;&lt;</code> 叫 here string，把一个字符串作为 stdin，脚本里用它把变量内容交给 <code>awk</code> 或 <code>wc</code>：<code>wc -l &lt;&lt;&lt; "$failed"</code>。</p>
+          </section>
+          <section id="pipes">
+<h2>管道、tee 与 xargs</h2>
+<p>管道符 <code>|</code> 把左边命令的 stdout 接到右边命令的 stdin。多个管道串起来时，数据依次流过每个命令，每一步只做一件事：</p>
+<pre class="code-block"><code>$ awk '/Failed/{print $11}' sample-secure.log | sort | uniq -c | sort -rn
+      3 192.168.1.50
+      2 admin
+      1 test
+      1 192.168.1.10
+</code></pre>
+<p>（结果里混进了 <code>admin</code> 和 <code>test</code>，这是字段错位，sed 一节会解决。）</p>
+<ul>
+<li>重定向把数据送进或取出<strong>文件</strong>，管道把数据送给<strong>另一个进程</strong>。</li>
+<li>管道只连接 stdout，stderr 默认不进入管道，需要时写 <code>2&gt;&amp;1 |</code> 或 <code>|&amp;</code>。</li>
+<li>在同一条命令上，重定向先于管道生效。<code>ls /etc/hostname &gt; out.txt | wc -l</code> 输出 <code>0</code>，因为 stdout 已经被重定向到文件，管道里什么都没有。</li>
+</ul>
+<h3>tee：既保存又继续传递</h3>
+<p><code>tee</code> 像水管的三通，把 stdin 同时写到文件和 stdout。保存报告的同时还能在屏幕上查看：</p>
+<pre class="code-block"><code>$ ./log-audit.sh sample-secure.log 2&gt;&amp;1 | tee report.txt | tail -1
+2 source(s) reached the threshold
+</code></pre>
+<p><code>tee -a</code> 表示追加。一个常见用法是 <code>echo "line" | sudo tee -a /etc/some.conf</code>，因为 <code>sudo echo ... &gt;&gt; file</code> 中的重定向由当前用户的 shell 执行，没有 root 权限。</p>
+<h3>xargs：把 stdin 变成命令行参数</h3>
+<p>有些命令只接受参数，不读 stdin（如 <code>rm</code>、<code>ls</code>、<code>ssh-copy-id</code>）。<code>xargs</code> 把 stdin 中的内容转成参数：</p>
+<pre class="code-block"><code>find /etc -maxdepth 1 -name 'host*' 2&gt;/dev/null | xargs ls -ld
+printf 'a\nb\n' | xargs -I {} echo 'host={}'     # -I 指定占位符，每行执行一次
+awk '{print $1}' hosts.list | xargs -I {} ssh-copy-id root@{}
+</code></pre>
+<p>注意 <code>find ... | ls -l</code> 是常见错误：<code>ls</code> 不读 stdin，只会列出当前目录。文件名可能含空格时，用 <code>find -print0 | xargs -0</code>。</p>
+          </section>
+          <section id="variables">
+<h2>变量、引用与环境</h2>
+<h3>赋值与引用</h3>
+<p>变量名可以包含大小写字母、数字和下划线，不能以数字开头。等号两边不能有空格：</p>
+<pre class="code-block"><code>threshold=3                # 正确
+threshold = 3              # 错误：会把 threshold 当成命令执行
+echo &quot;$threshold&quot;          # 取值
+echo &quot;${threshold}rd&quot;      # 花括号界定变量名
+today=$(date +%F)          # 命令替换：把命令输出赋给变量
+threshold=${THRESHOLD:-3}  # THRESHOLD 未设置或为空时用默认值 3
+</code></pre>
+<p><code>set</code> 列出当前 shell 的所有变量和函数，<code>unset name</code> 删除变量。</p>
+<h3>引号</h3>
+<p>部分字符对 shell 有特殊含义（<code>$</code>、空格、<code>*</code>、<code>;</code>、<code>|</code> 等）。三种方式可以取消特殊含义：</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>反斜杠 <code>\</code></td>
+<td>只转义紧跟的一个字符</td>
+</tr>
+<tr>
+<td>单引号 <code>'...'</code></td>
+<td>全部按字面处理，不展开任何东西</td>
+</tr>
+<tr>
+<td>双引号 <code>"..."</code></td>
+<td>保留空格，但仍展开 <code>$变量</code>、<code>$(命令)</code> 和 <code>`命令`</code></td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ name=world; echo 'single: $name' &quot;double: $name&quot; escaped: \$name
+single: $name double: world escaped: $name
+</code></pre>
+<p>经验规则：变量展开一律加双引号（<code>"$file"</code>），否则值中的空格会把它拆成多个参数；正则表达式和 awk 程序用单引号，避免 shell 先处理其中的 <code>$</code> 和 <code>*</code>。</p>
+<h3>shell 变量与环境变量</h3>
+<p>普通变量只属于当前 shell。<code>export</code> 把它变成环境变量，之后启动的子进程（包括脚本）才能看到：</p>
+<pre class="code-block"><code>$ FOO=shell; bash -c 'echo child sees: [$FOO]'
+child sees: []
+$ export FOO; bash -c 'echo child sees: [$FOO]'
+child sees: [shell]
+$ export -n FOO      # 取消导出，FOO 变回普通 shell 变量，值保留
+$ unset FOO          # 彻底删除
+</code></pre>
+<ul>
+<li><code>env</code> 列出环境变量，<code>set</code> 列出全部变量。</li>
+<li><code>VAR=value command</code> 只为这一条命令设置环境变量。<code>log-audit.sh</code> 用这种方式接受配置：<code>THRESHOLD=5 ./log-audit.sh sample-secure.log</code>。</li>
+<li><code>PATH</code> 是最重要的环境变量，决定 shell 去哪些目录查找命令。<code>HISTFILE</code>、<code>HISTFILESIZE</code>、<code>HISTTIMEFORMAT="%F %T "</code> 等变量调整 history 的行为（格式符与 <code>date</code> 相同）。</li>
+</ul>
+<h3>启动文件</h3>
+<p>Bash 启动时读取哪些文件，取决于启动方式：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>范围</th>
+<th>何时读取</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/etc/profile</code>、<code>/etc/profile.d/*.sh</code></td>
+<td>所有用户</td>
+<td>登录 shell</td>
+</tr>
+<tr>
+<td><code>~/.bash_profile</code></td>
+<td>当前用户</td>
+<td>登录 shell（RHEL 默认会再加载 <code>~/.bashrc</code>）</td>
+</tr>
+<tr>
+<td><code>~/.bashrc</code></td>
+<td>当前用户</td>
+<td>交互式非登录 shell，例如图形终端中新开的窗口</td>
+</tr>
+<tr>
+<td><code>/etc/bashrc</code></td>
+<td>所有用户</td>
+<td>由 <code>~/.bashrc</code> 加载</td>
+</tr>
+</tbody>
+</table>
+<p>非交互式运行的脚本<strong>不会</strong>读取这些文件，它只继承父进程导出的环境变量。所以脚本不能依赖你在 <code>~/.bashrc</code> 里定义的变量或函数，需要的值应该在脚本内设置或通过环境变量传入。修改启动文件后，用 <code>source ~/.bashrc</code> 在当前 shell 生效。</p>
+          </section>
+          <section id="args-exit">
+<h2>参数、退出码与 exec</h2>
+<h3>位置参数</h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$0</code></td>
+<td>脚本名（调用时使用的路径）</td>
+</tr>
+<tr>
+<td><code>$1</code> … <code>$9</code>、<code>${10}</code></td>
+<td>第 1 到第 N 个参数</td>
+</tr>
+<tr>
+<td><code>$#</code></td>
+<td>参数个数</td>
+</tr>
+<tr>
+<td><code>"$@"</code></td>
+<td>全部参数，每个参数保持独立</td>
+</tr>
+<tr>
+<td><code>"$*"</code></td>
+<td>全部参数合成一个字符串，用空格连接</td>
+</tr>
+<tr>
+<td><code>$?</code></td>
+<td>上一条命令的退出码</td>
+</tr>
+<tr>
+<td><code>$$</code></td>
+<td>当前 shell 的 PID</td>
+</tr>
+</tbody>
+</table>
+<p><code>"$@"</code> 和 <code>"$*"</code> 的差别在参数含空格时才明显：</p>
+<pre class="code-block"><code>#!/bin/bash
+# args.sh
+echo &quot;\$# = $#&quot;
+for a in &quot;$@&quot;; do echo &quot;  \&quot;\$@\&quot; -&gt; [$a]&quot;; done
+for a in &quot;$*&quot;; do echo &quot;  \&quot;\$*\&quot; -&gt; [$a]&quot;; done
+for a in $*;   do echo &quot;  \$*   -&gt; [$a]&quot;; done
+</code></pre>
+<pre class="code-block"><code>$ ./args.sh 'web 01' db
+$# = 2
+  &quot;$@&quot; -&gt; [web 01]
+  &quot;$@&quot; -&gt; [db]
+  &quot;$*&quot; -&gt; [web 01 db]
+  $*   -&gt; [web]
+  $*   -&gt; [01]
+  $*   -&gt; [db]
+</code></pre>
+<p>遍历参数时几乎总是用 <code>"$@"</code>。不加引号的 <code>$*</code>（以及 <code>$@</code>）会按空格再拆一次。<code>log-audit.sh</code> 用 <code>"$@"</code> 把所有日志文件原样交给 grep。</p>
+<h3>退出码</h3>
+<p>每个命令结束时返回 0 到 255 的退出码：0 表示成功，非零表示失败，不同的非零值可以区分不同错误。父进程从 <code>$?</code> 读取它。脚本用 <code>exit N</code> 提前结束并返回 N；不写 <code>exit</code> 时，返回最后一条命令的退出码。</p>
+<pre class="code-block"><code>$ bash -c 'false; echo rc=$?; exit 7'; echo outer=$?
+rc=1
+outer=7
+</code></pre>
+<p><code>log-audit.sh</code> 的约定：<code>0</code> 正常，<code>1</code> 用法或输入错误，<code>2</code> 有来源达到告警阈值。这样 cron 或监控系统不用解析文本，就能判断结果。</p>
+<p>注意 grep 的退出码：有匹配返回 0，没有匹配返回 1，出错返回 2。在 <code>set -e</code> 下，“没有匹配”也会终止脚本，所以要写 <code>grep ... || true</code>。</p>
+<h3>exec</h3>
+<p><code>exec</code> 有两种用法：</p>
+<ol>
+<li><code>exec 命令</code>：用该命令<strong>替换</strong>当前 shell 进程，PID 不变，后面的脚本内容不会再执行。常用于包装脚本的最后一步，例如 <code>exec java -jar app.jar "$@"</code>。</li>
+<li><code>exec</code> 只带重定向：改变当前 shell 自己的文件描述符，对之后的所有命令生效。</li>
+</ol>
+<pre class="code-block"><code>#!/bin/bash
+echo &quot;before exec&quot;
+exec echo &quot;exec replaced the shell&quot;
+echo &quot;never printed&quot;
+</code></pre>
+<p><code>log-audit.sh</code> 用第二种实现 <code>OUTPUT=file</code>：之后所有 stdout 都写进文件，而错误信息仍然显示在终端上。</p>
+<pre class="code-block"><code>if [ -n &quot;${OUTPUT:-}&quot; ]; then
+    exec &gt; &quot;$OUTPUT&quot;
+fi
+</code></pre>
+          </section>
+          <section id="tests">
+<h2>测试与条件判断</h2>
+<p><code>test 表达式</code> 和 <code>[ 表达式 ]</code> 是同一个命令，测试结果通过退出码返回：成立为 0，不成立为 1。<code>[</code> 是命令名，所以两侧必须有空格。</p>
+<pre class="code-block"><code>$ x=5; [ $x -gt 3 ]; echo $?; [ $x -eq 3 ]; echo $?
+0
+1
+</code></pre>
+<h3>常用测试</h3>
+<table>
+<thead>
+<tr>
+<th>数值比较</th>
+<th>字符串</th>
+<th>文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-eq</code> 等于</td>
+<td><code>=</code> 或 <code>==</code> 相等</td>
+<td><code>-e</code> 存在</td>
+</tr>
+<tr>
+<td><code>-ne</code> 不等于</td>
+<td><code>!=</code> 不等</td>
+<td><code>-f</code> 是普通文件</td>
+</tr>
+<tr>
+<td><code>-gt</code> 大于</td>
+<td><code>-z</code> 长度为零</td>
+<td><code>-d</code> 是目录</td>
+</tr>
+<tr>
+<td><code>-ge</code> 大于等于</td>
+<td><code>-n</code> 长度非零</td>
+<td><code>-r</code> / <code>-w</code> / <code>-x</code> 可读/可写/可执行</td>
+</tr>
+<tr>
+<td><code>-lt</code> 小于</td>
+<td></td>
+<td><code>-s</code> 大小非零</td>
+</tr>
+<tr>
+<td><code>-le</code> 小于等于</td>
+<td></td>
+<td><code>-L</code> 是符号链接</td>
+</tr>
+</tbody>
+</table>
+<p><code>!</code> 取反，<code>&amp;&amp;</code> / <code>||</code> 组合多个测试：<code>[ -f "$f" ] &amp;&amp; [ -r "$f" ]</code>。</p>
+<h3><code>[[ ]]</code> 与 <code>(( ))</code></h3>
+<ul>
+<li><code>[[ ... ]]</code> 是 Bash 关键字。变量不加引号也不会被拆分，支持通配符匹配 <code>[[ $host == server* ]]</code> 和正则匹配 <code>[[ $n =~ ^[0-9]+$ ]]</code>。</li>
+<li><code>(( ... ))</code> 做整数运算和比较，里面的变量不需要 <code>$</code>：<code>(( fails &gt;= limit ))</code>。</li>
+<li><code>$(( ... ))</code> 返回运算结果：</li>
+</ul>
+<pre class="code-block"><code>$ a=10; echo $(( a + 1 )) $(( a / 3 )) $(( a % 3 )) $(( a * 3 )) $(( a ** 2 ))
+11 3 1 30 100
+</code></pre>
+<p>Bash 只支持整数，<code>10/3</code> 得 3。需要小数时用 <code>awk 'BEGIN{printf "%.2f\n", 10/3}'</code> 或 <code>bc</code>。</p>
+<h3>if / elif / else</h3>
+<pre class="code-block"><code>if (( fails &gt;= limit )); then
+    status=ALERT
+elif (( fails &gt; 0 )); then
+    status=WARN
+else
+    status=OK
+fi
+</code></pre>
+<p>Bash 按顺序测试条件，执行第一个成立的分支后跳过其余部分；都不成立时执行 <code>else</code>。<code>if</code> 后面可以是任何命令，不只是 <code>[ ]</code>：<code>if grep -q root "$file"; then ...</code>。</p>
+<p>简单的分支可以用 <code>&amp;&amp;</code> / <code>||</code> 简写：<code>[ $# -ge 1 ] || usage</code>。</p>
+<h3>脚本中的输入校验</h3>
+<pre class="code-block"><code>[ $# -ge 1 ] || usage
+threshold=${THRESHOLD:-3}
+[[ $threshold =~ ^[0-9]+$ ]] || { echo &quot;error: THRESHOLD must be a number&quot; &gt;&amp;2; exit 1; }
+</code></pre>
+          </section>
+          <section id="loops">
+<h2>循环</h2>
+<h3>for</h3>
+<pre class="code-block"><code>for file in &quot;$@&quot;; do              # 遍历参数
+    if [ ! -r &quot;$file&quot; ]; then
+        echo &quot;error: cannot read $file&quot; &gt;&amp;2
+        exit 1
+    fi
+done
+
+for i in $(seq 2 2 8); do ...     # 2 4 6 8：起始、步长、结束
+for i in {1..5}; do ...           # 花括号展开
+for ((i=1; i&lt;=3; i++)); do ...    # C 风格
+</code></pre>
+<h3>按行读取文件：用 while read</h3>
+<p><code>for line in $(cat file)</code> 是常见错误，它按空白拆分，而不是按行：</p>
+<pre class="code-block"><code>$ printf 'web 01\ndb\n' &gt; hosts.txt
+$ for h in $(cat hosts.txt); do echo &quot;[$h]&quot;; done
+[web]
+[01]
+[db]
+$ while read -r h; do echo &quot;[$h]&quot;; done &lt; hosts.txt
+[web 01]
+[db]
+</code></pre>
+<p><code>read -r</code> 禁止反斜杠转义。<code>read</code> 还可以一次读多个字段，最后一个变量接收剩余部分。脚本的“成功登录”部分就用了这种写法：</p>
+<pre class="code-block"><code>awk '{ print $9, $11, $7 }' &lt;&lt;&lt; &quot;$accepted&quot; | sort | uniq -c |
+while read -r count user ip method; do
+    printf '%-10s from %-15s via %-9s x%d\n' &quot;$user&quot; &quot;$ip&quot; &quot;$method&quot; &quot;$count&quot;
+done
+</code></pre>
+<p>管道右边的 <code>while</code> 运行在子 shell 中，循环里设置的变量在循环结束后不可见。需要保留结果时，改用 <code>done &lt; file</code> 或 <code>done &lt; &lt;(command)</code>。</p>
+<p><code>until 条件; do ...; done</code> 在条件成立前一直循环。<code>break</code> 跳出循环，<code>continue</code> 进入下一轮。</p>
+          </section>
+          <section id="grep-regex">
+<h2>正则表达式与 grep</h2>
+<p>正则表达式是一套描述文本模式的语言，<code>grep</code>、<code>sed</code>、<code>awk</code>、<code>vim</code>、<code>less</code> 以及 Python、Perl 等都使用它。Linux 工具里有两种语法：</p>
+<ul>
+<li><strong>BRE</strong>（基本正则）：<code>grep</code>、<code>sed</code> 的默认语法。<code>?</code>、<code>+</code>、<code>{}</code>、<code>()</code>、<code>|</code> 需要写成 <code>\?</code>、<code>\+</code>、<code>\{\}</code>、<code>\(\)</code>、<code>\|</code> 才有特殊含义。</li>
+<li><strong>ERE</strong>（扩展正则）：<code>grep -E</code>、<code>sed -E</code>、<code>awk</code> 使用，这些符号直接生效，写起来更清楚。</li>
+</ul>
+<pre class="code-block"><code>$ printf 'catcat\ncat\n' | grep 'c\(at\)\{2\}'      # BRE
+catcat
+$ printf 'catcat\ncat\n' | grep -E '(cat){2}'       # ERE，等价
+catcat
+</code></pre>
+<h3>元字符</h3>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>含义</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.</code></td>
+<td>任意单个字符</td>
+<td><code>c.t</code> 匹配 cat、c5t</td>
+</tr>
+<tr>
+<td><code>[abc]</code> / <code>[^abc]</code></td>
+<td>集合中的一个字符 / 集合外的一个字符</td>
+<td><code>c[aou]t</code> 只匹配 cat、cot、cut</td>
+</tr>
+<tr>
+<td><code>^</code> / <code>$</code></td>
+<td>行首 / 行尾</td>
+<td><code>^cat$</code> 整行只有 cat</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>前一项 0 次或多次</td>
+<td><code>c.*t</code> 以 c 开头、t 结尾（不要写成 <code>c*t</code>）</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>前一项 1 次或多次（ERE）</td>
+<td><code>[0-9]+</code></td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>前一项 0 或 1 次（ERE）</td>
+<td><code>colou?r</code></td>
+</tr>
+<tr>
+<td><code>{n}</code> <code>{n,}</code> <code>{,m}</code> <code>{n,m}</code></td>
+<td>前一项重复次数（ERE）</td>
+<td><code>c.{2}t</code> 匹配 coat</td>
+</tr>
+<tr>
+<td><code>(a\|b)</code></td>
+<td>分组与选择（ERE）</td>
+<td><code>(admin\|test)</code></td>
+</tr>
+<tr>
+<td><code>\b</code> / <code>\B</code></td>
+<td>词边界 / 非词边界</td>
+<td><code>\broot\b</code></td>
+</tr>
+<tr>
+<td><code>\&lt;</code> / <code>\&gt;</code></td>
+<td>词首 / 词尾</td>
+<td><code>\&lt;cat</code></td>
+</tr>
+<tr>
+<td><code>\w</code> / <code>\W</code></td>
+<td>词字符 <code>[_[:alnum:]]</code> / 非词字符</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\s</code> / <code>\S</code></td>
+<td>空白 / 非空白</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>POSIX 字符类要写在方括号里，例如 <code>[[:digit:]]+</code>：</p>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[:alnum:]</code></td>
+<td>字母和数字</td>
+</tr>
+<tr>
+<td><code>[:alpha:]</code></td>
+<td>字母</td>
+</tr>
+<tr>
+<td><code>[:digit:]</code></td>
+<td>数字 0-9</td>
+</tr>
+<tr>
+<td><code>[:xdigit:]</code></td>
+<td>十六进制数字</td>
+</tr>
+<tr>
+<td><code>[:lower:]</code> / <code>[:upper:]</code></td>
+<td>小写 / 大写字母</td>
+</tr>
+<tr>
+<td><code>[:blank:]</code></td>
+<td>空格和制表符</td>
+</tr>
+<tr>
+<td><code>[:space:]</code></td>
+<td>所有空白字符，包括换行、回车、垂直制表符</td>
+</tr>
+<tr>
+<td><code>[:punct:]</code></td>
+<td>标点符号</td>
+</tr>
+<tr>
+<td><code>[:print:]</code> / <code>[:graph:]</code></td>
+<td>可打印字符（含空格）/ 可见字符（不含空格）</td>
+</tr>
+<tr>
+<td><code>[:cntrl:]</code></td>
+<td>控制字符</td>
+</tr>
+</tbody>
+</table>
+<p>完整说明见 <code>man 7 regex</code>。</p>
+<h3>grep 常用选项</h3>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-i</code></td>
+<td>忽略大小写</td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td>反向，只显示不匹配的行</td>
+</tr>
+<tr>
+<td><code>-c</code></td>
+<td>只输出匹配行数</td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td>显示行号</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td>只输出匹配到的部分</td>
+</tr>
+<tr>
+<td><code>-w</code></td>
+<td>整词匹配</td>
+</tr>
+<tr>
+<td><code>-q</code></td>
+<td>不输出，只返回退出码，适合放在 <code>if</code> 中</td>
+</tr>
+<tr>
+<td><code>-l</code></td>
+<td>只列出包含匹配的文件名</td>
+</tr>
+<tr>
+<td><code>-h</code> / <code>-H</code></td>
+<td>多文件时不显示 / 显示文件名前缀</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>递归搜索目录</td>
+</tr>
+<tr>
+<td><code>-A n</code> / <code>-B n</code> / <code>-C n</code></td>
+<td>显示匹配行之后 / 之前 / 前后 n 行</td>
+</tr>
+<tr>
+<td><code>-e PAT</code></td>
+<td>指定模式，可重复多次，相当于逻辑或</td>
+</tr>
+<tr>
+<td><code>-E</code></td>
+<td>使用 ERE</td>
+</tr>
+<tr>
+<td><code>-F</code></td>
+<td>把模式当作固定字符串，不解释元字符</td>
+</tr>
+</tbody>
+</table>
+<p>正则表达式常含 <code>$</code>、<code>*</code>、<code>{}</code> 等 shell 元字符，所以模式一律用单引号。</p>
+<h3>用 grep 提取数据</h3>
+<pre class="code-block"><code>$ grep -c 'Failed password' sample-secure.log
+7
+$ grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' sample-secure.log | sort -u
+10.0.0.5
+192.168.1.10
+192.168.1.50
+203.0.113.7
+$ grep -v sshd sample-secure.log
+Nov  5 08:05:10 servera sudo[1300]:  student : TTY=pts/0 ; PWD=/home/student ; USER=root ; COMMAND=/usr/bin/dnf update
+$ grep -n -A1 'Accepted publickey' sample-secure.log
+9:Nov  5 08:06:30 servera sshd[1311]: Accepted publickey for operator from 10.0.0.5 port 52000 ssh2
+10-Nov  5 08:07:02 servera sshd[1320]: Failed password for root from 192.168.1.50 port 50400 ssh2
+$ grep -F '[1201]' sample-secure.log | wc -l     # 方括号按字面匹配
+2
+</code></pre>
+<p>脚本中先用 grep 把相关行筛出来，存进变量：</p>
+<pre class="code-block"><code>failed=$(grep -hE 'sshd\[[0-9]+\]: Failed password' &quot;$@&quot; || true)
+accepted=$(grep -hE 'sshd\[[0-9]+\]: Accepted ' &quot;$@&quot; || true)
+</code></pre>
+<p><code>-h</code> 去掉多文件时的文件名前缀，保证每行格式一致；<code>\[</code> 让方括号按字面匹配。</p>
+          </section>
+          <section id="sed">
+<h2>sed 进阶</h2>
+<p><code>sed</code>（stream editor）逐行读取输入，对每一行执行一组命令，再把结果输出。它适合做替换、删除、插入和提取这类按规则批量编辑的工作，也适合在脚本里修改配置文件。</p>
+<h3>执行模型</h3>
+<ol>
+<li>读入一行，去掉换行符，放进<strong>模式空间</strong>（pattern space）。</li>
+<li>依次执行脚本中地址匹配的命令。</li>
+<li>打印模式空间（除非使用了 <code>-n</code>），然后清空，读下一行。</li>
+</ol>
+<p>另外还有一个<strong>保持空间</strong>（hold space），在行与行之间保留数据，初始为空。</p>
+<p>基本形式：<code>sed [选项] '地址命令' 文件</code>。</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-n</code></td>
+<td>不自动打印，只输出 <code>p</code> 命令打印的内容</td>
+</tr>
+<tr>
+<td><code>-E</code></td>
+<td>使用 ERE</td>
+</tr>
+<tr>
+<td><code>-e 脚本</code></td>
+<td>添加一段脚本，可多次使用</td>
+</tr>
+<tr>
+<td><code>-f 文件</code></td>
+<td>从文件读取 sed 脚本</td>
+</tr>
+<tr>
+<td><code>-i[后缀]</code></td>
+<td>直接修改文件；带后缀时先备份，例如 <code>-i.bak</code></td>
+</tr>
+</tbody>
+</table>
+<h3>地址</h3>
+<table>
+<thead>
+<tr>
+<th>地址</th>
+<th>匹配</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>3</code></td>
+<td>第 3 行</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>最后一行</td>
+</tr>
+<tr>
+<td><code>2,5</code></td>
+<td>第 2 到 5 行</td>
+</tr>
+<tr>
+<td><code>/re/</code></td>
+<td>匹配正则的行</td>
+</tr>
+<tr>
+<td><code>/re1/,/re2/</code></td>
+<td>从匹配 re1 的行到下一个匹配 re2 的行</td>
+</tr>
+<tr>
+<td><code>1~4</code></td>
+<td>从第 1 行开始每 4 行一次（GNU 扩展）</td>
+</tr>
+<tr>
+<td><code>addr!</code></td>
+<td>不匹配该地址的行</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ sed -n '3p' sample-secure.log
+Nov  5 08:02:03 servera sshd[1210]: Accepted password for student from 192.168.1.10 port 50200 ssh2
+$ sed -n '/sudo/,/publickey/p' sample-secure.log
+Nov  5 08:05:10 servera sudo[1300]:  student : TTY=pts/0 ; PWD=/home/student ; USER=root ; COMMAND=/usr/bin/dnf update
+Nov  5 08:06:21 servera sshd[1310]: Failed password for student from 192.168.1.10 port 50300 ssh2
+Nov  5 08:06:30 servera sshd[1311]: Accepted publickey for operator from 10.0.0.5 port 52000 ssh2
+$ sed -n '/Accepted/=' sample-secure.log      # = 打印行号
+3
+9
+</code></pre>
+<h3>替换命令 s</h3>
+<p><code>s/正则/替换/标志</code>。分隔符可以换成任意字符，路径里有 <code>/</code> 时用 <code>#</code> 或 <code>|</code> 更易读：<code>s#/usr/bin/#BIN:#</code>。</p>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>g</code></td>
+<td>替换行内所有匹配，默认只替换第一个</td>
+</tr>
+<tr>
+<td><code>N</code>（数字）</td>
+<td>只替换第 N 个匹配</td>
+</tr>
+<tr>
+<td><code>I</code></td>
+<td>忽略大小写（GNU）</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>发生替换时打印该行，通常配合 <code>-n</code></td>
+</tr>
+<tr>
+<td><code>w 文件</code></td>
+<td>发生替换时把该行写入文件</td>
+</tr>
+</tbody>
+</table>
+<p>替换部分中，<code>&amp;</code> 代表整个匹配，<code>\1</code>…<code>\9</code> 代表分组（BRE 里是 <code>\(\)</code>，ERE 里是 <code>()</code>）：</p>
+<pre class="code-block"><code>$ sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/&lt;&amp;&gt;/' sample-secure.log | sed -n '1p'
+Nov  5 08:01:12 servera sshd[1201]: Failed password for root from &lt;192.168.1.50&gt; port 50122 ssh2
+
+$ sed -E 's/from ([0-9.]+) port ([0-9]+)/from \2:\1/' sample-secure.log | sed -n '1p'
+Nov  5 08:01:12 servera sshd[1201]: Failed password for root from 50122:192.168.1.50 ssh2
+
+$ sed -E 's/([0-9]+\.[0-9]+\.[0-9]+)\.[0-9]+/\1.xxx/g' sample-secure.log | sed -n '3p'
+Nov  5 08:02:03 servera sshd[1210]: Accepted password for student from 192.168.1.xxx port 50200 ssh2
+
+$ sed -n 's/Failed/FAILED/2p' &lt;&lt;&lt; 'Failed Failed Failed'
+Failed FAILED Failed
+
+$ sed -n '/Failed/{s/.*from \([0-9.]*\).*/\1/;p}' sample-secure.log | sort | uniq -c
+      1 192.168.1.10
+      3 192.168.1.50
+      3 203.0.113.7
+</code></pre>
+<p>第三个例子在分享日志前给 IP 脱敏。最后一个例子用 <code>{}</code> 把多条命令组合在一个地址下，只对 Failed 行提取 IP。</p>
+<h3>其他命令</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>p</code></td>
+<td>打印模式空间</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>删除模式空间，直接开始下一轮</td>
+</tr>
+<tr>
+<td><code>a 文本</code> / <code>i 文本</code></td>
+<td>在当前行之后 / 之前插入一行</td>
+</tr>
+<tr>
+<td><code>c 文本</code></td>
+<td>用文本替换当前行</td>
+</tr>
+<tr>
+<td><code>y/abc/ABC/</code></td>
+<td>逐字符转换，类似 <code>tr</code></td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>打印当前行后退出</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>打印当前行（无 <code>-n</code> 时），读入下一行替换模式空间</td>
+</tr>
+<tr>
+<td><code>N</code></td>
+<td>把下一行追加到模式空间，中间用换行分隔</td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>打印行号</td>
+</tr>
+<tr>
+<td><code>r 文件</code> / <code>w 文件</code></td>
+<td>读入文件内容插在当前行后 / 把当前行写入文件</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ sed '/sudo/d; /Accepted/d' sample-secure.log | wc -l
+7
+$ sed -e '1i # audit start' -e '$a # audit end' -e '2,9d' sample-secure.log
+# audit start
+Nov  5 08:01:12 servera sshd[1201]: Failed password for root from 192.168.1.50 port 50122 ssh2
+Nov  5 08:07:02 servera sshd[1320]: Failed password for root from 192.168.1.50 port 50400 ssh2
+# audit end
+$ sed '/sudo/c [sudo line redacted]' sample-secure.log | sed -n '7p'
+[sudo line redacted]
+$ sed '3q' sample-secure.log | wc -l        # 只读前 3 行就退出，比 head 更早停止
+3
+$ printf 'a\nb\nc\nd\n' | sed -n 'n;p'       # 打印偶数行
+b
+d
+$ printf 'line1\nline2\nline3\nline4\n' | sed 'N;s/\n/ | /'   # 两行合并为一行
+line1 | line2
+line3 | line4
+</code></pre>
+<h3>保持空间</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>h</code> / <code>H</code></td>
+<td>模式空间复制 / 追加到保持空间</td>
+</tr>
+<tr>
+<td><code>g</code> / <code>G</code></td>
+<td>保持空间复制 / 追加到模式空间</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td>交换两个空间</td>
+</tr>
+</tbody>
+</table>
+<p>反转行序（等同于 <code>tac</code>）：</p>
+<pre class="code-block"><code>$ printf 'a\nb\nc\n' | sed -n '1!G;h;$p'
+c
+b
+a
+</code></pre>
+<p>逐行看：第 1 行 <code>a</code> 跳过 <code>G</code>，<code>h</code> 存入保持空间。第 2 行 <code>G</code> 把保持空间追加进来得到 <code>b\na</code>，再存回去。到最后一行，模式空间是 <code>c\nb\na</code>，用 <code>$p</code> 打印。</p>
+<p>把空行分隔的段落合并成一行：</p>
+<pre class="code-block"><code>$ printf 'para1 a\npara1 b\n\npara2 a\npara2 b\n' | sed -n '/./{H;$!d};x;s/\n/ /g;s/^ //;/./p'
+para1 a para1 b
+para2 a para2 b
+</code></pre>
+<p>非空行用 <code>H</code> 累积到保持空间；不是最后一行时 <code>d</code> 结束本轮。遇到空行或最后一行时，<code>x</code> 把累积的段落换出来，把换行替换为空格，再打印。</p>
+<h3>就地编辑配置文件</h3>
+<pre class="code-block"><code>$ printf 'key=old\n' &gt; c.conf
+$ sed -i.bak 's/^key=.*/key=new/' c.conf; cat c.conf c.conf.bak
+key=new
+key=old
+</code></pre>
+<p>修改系统配置时一定带备份后缀，并先不加 <code>-i</code> 预览结果。</p>
+<h3>在脚本中：用 sed 规整数据</h3>
+<p>查看第 4 行的字段就会发现问题：<code>invalid user</code> 多出两个单词，后面的字段整体右移。</p>
+<pre class="code-block"><code>$ sed -n '4p' sample-secure.log | awk '{for (i=6; i&lt;=NF; i++) printf &quot;$%d=%s &quot;, i, $i; print &quot;&quot;}'
+$6=Failed $7=password $8=for $9=invalid $10=user $11=admin $12=from $13=203.0.113.7 $14=port $15=41000 $16=ssh2
+</code></pre>
+<p>这就是前面 <code>uniq -c</code> 结果里混进 <code>admin</code> 和 <code>test</code> 的原因。先用 sed 把两种格式统一，再交给 awk：</p>
+<pre class="code-block"><code>$ sed -E 's/ for invalid user / for /' sample-secure.log | sed -n '4,6p'
+Nov  5 08:03:44 servera sshd[1222]: Failed password for admin from 203.0.113.7 port 41000 ssh2
+Nov  5 08:03:47 servera sshd[1222]: Failed password for admin from 203.0.113.7 port 41000 ssh2
+Nov  5 08:03:50 servera sshd[1222]: Failed password for test from 203.0.113.7 port 41002 ssh2
+</code></pre>
+<pre class="code-block"><code>failed=$(grep -hE 'sshd\[[0-9]+\]: Failed password' &quot;$@&quot; \
+    | sed -E 's/ for invalid user / for /' || true)
+</code></pre>
+<p>规整之后，用户名固定在 <code>$9</code>，IP 固定在 <code>$11</code>。</p>
+          </section>
+          <section id="awk">
+<h2>awk 进阶</h2>
+<p><code>awk</code> 把输入看成由<strong>记录</strong>（默认一行）组成，每条记录又拆成<strong>字段</strong>（默认按连续空白拆分）。awk 程序由 <code>模式 { 动作 }</code> 组成，对每条记录检查模式，匹配时执行动作。它适合按列提取、过滤、统计和格式化报告。</p>
+<h3>字段与内置变量</h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$0</code></td>
+<td>整条记录</td>
+</tr>
+<tr>
+<td><code>$1</code>…<code>$N</code></td>
+<td>第 N 个字段；<code>$NF</code> 是最后一个，<code>$(NF-1)</code> 是倒数第二个</td>
+</tr>
+<tr>
+<td><code>NF</code></td>
+<td>当前记录的字段数</td>
+</tr>
+<tr>
+<td><code>NR</code></td>
+<td>已读取的记录总数（跨文件累计）</td>
+</tr>
+<tr>
+<td><code>FNR</code></td>
+<td>当前文件内的记录号</td>
+</tr>
+<tr>
+<td><code>FS</code> / <code>OFS</code></td>
+<td>输入 / 输出字段分隔符，<code>-F</code> 设置 FS</td>
+</tr>
+<tr>
+<td><code>RS</code> / <code>ORS</code></td>
+<td>输入 / 输出记录分隔符</td>
+</tr>
+<tr>
+<td><code>FILENAME</code></td>
+<td>当前文件名</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ awk '{print $1, $2, $3}' sample-secure.log | head -2
+Nov 5 08:01:12
+Nov 5 08:01:15
+$ awk -F: 'BEGIN{OFS=&quot; -&gt; &quot;} NR&lt;=2 {print $1, $6}' /etc/passwd
+root -&gt; /root
+bin -&gt; /bin
+$ awk 'END{print NR}' sample-secure.log
+10
+</code></pre>
+<p>第一个例子里 <code>Nov  5</code> 中的两个空格变成了一个，因为默认 FS 把连续空白当作一个分隔符，<code>print</code> 再用 OFS（一个空格）连接字段。<code>cut -d' '</code> 则把每个空格都当分隔符，处理这种日志容易出错。</p>
+<h3>模式</h3>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正则</td>
+<td><code>/Accepted/</code></td>
+</tr>
+<tr>
+<td>字段匹配</td>
+<td><code>$5 ~ /^sudo/</code>，<code>$6 !~ /Failed/</code></td>
+</tr>
+<tr>
+<td>比较</td>
+<td><code>$3 &gt;= 1000</code>，<code>$6 == "Failed"</code></td>
+</tr>
+<tr>
+<td>组合</td>
+<td><code>/Failed/ &amp;&amp; /root/</code>，<code>!/sshd/</code></td>
+</tr>
+<tr>
+<td>范围</td>
+<td><code>NR==2, NR==4</code></td>
+</tr>
+<tr>
+<td><code>BEGIN</code> / <code>END</code></td>
+<td>读取输入前 / 全部读完后执行一次</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ awk '/Accepted/ {print $9, $11}' sample-secure.log
+student 192.168.1.10
+operator 10.0.0.5
+$ awk '$5 ~ /^sudo/ {print $6, $NF}' sample-secure.log
+student update
+$ awk '/Failed/ &amp;&amp; /root/ {n++} END {print n+0}' sample-secure.log
+3
+$ awk -F: '$3 &gt;= 1000 &amp;&amp; $3 &lt; 60000 {print $1, $7}' /etc/passwd   # 普通用户
+</code></pre>
+<p><code>n+0</code> 保证没有匹配时输出 0 而不是空字符串。</p>
+<h3>变量、printf 与 -v</h3>
+<p>awk 变量无需声明，未赋值时数值为 0、字符串为空。<code>-v</code> 把 shell 的值传进 awk，这比把 <code>$var</code> 拼进单引号程序安全：</p>
+<pre class="code-block"><code>$ awk -v ip=203.0.113.7 '$0 ~ ip {n++} END{print ip, n}' sample-secure.log
+203.0.113.7 3
+$ awk '/Failed/ {f++} /Accepted/ {a++} END {printf &quot;failed=%d accepted=%d rate=%.1f%%\n&quot;, f, a, f*100/(f+a)}' sample-secure.log
+failed=7 accepted=2 rate=77.8%
+</code></pre>
+<p><code>printf</code> 的格式与 C 相同：<code>%s</code> 字符串、<code>%d</code> 整数、<code>%.1f</code> 小数、<code>%-15s</code> 左对齐宽 15、<code>%5d</code> 右对齐宽 5、<code>%%</code> 输出百分号。<code>printf</code> 不会自动换行。</p>
+<h3>关联数组</h3>
+<p>awk 的数组以字符串为下标，适合计数和分组：</p>
+<pre class="code-block"><code>$ awk '/Failed/ {c[$(NF-3)]++} END {for (k in c) printf &quot;%-15s %d\n&quot;, k, c[k]}' sample-secure.log | sort -k2,2nr
+192.168.1.50    3
+203.0.113.7     3
+192.168.1.10    1
+$ awk '{split($3, t, &quot;:&quot;); h[t[1]&quot;:&quot;t[2]]++} END{for(k in h) print k, h[k]}' sample-secure.log | sort
+08:01 2
+08:02 1
+08:03 3
+08:05 1
+08:06 2
+08:07 1
+</code></pre>
+<ul>
+<li>第一个例子用 <code>$(NF-3)</code> 从行尾倒数取 IP，不受 <code>invalid user</code> 影响。这是解决字段错位的另一种方法。</li>
+<li><code>for (k in a)</code> 的遍历顺序不确定，需要稳定顺序时交给 <code>sort</code>。</li>
+<li><code>(k in a)</code> 判断键是否存在，且不会创建该键；<code>delete a[k]</code> 删除元素。</li>
+<li>多维下标 <code>seen[ip, user]</code> 实际上用 <code>SUBSEP</code> 把两个值拼成一个键。<code>!seen[key]++</code> 是经典的去重写法：第一次出现时为真。</li>
+</ul>
+<h3>内置函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>length(s)</code></td>
+<td>长度</td>
+</tr>
+<tr>
+<td><code>substr(s, start, len)</code></td>
+<td>子串，下标从 1 开始</td>
+</tr>
+<tr>
+<td><code>index(s, t)</code></td>
+<td>t 在 s 中的位置</td>
+</tr>
+<tr>
+<td><code>split(s, arr, sep)</code></td>
+<td>拆分到数组，返回元素个数</td>
+</tr>
+<tr>
+<td><code>sub(re, repl, target)</code></td>
+<td>替换第一个匹配，默认作用于 <code>$0</code></td>
+</tr>
+<tr>
+<td><code>gsub(re, repl, target)</code></td>
+<td>替换全部匹配</td>
+</tr>
+<tr>
+<td><code>match(s, re)</code></td>
+<td>设置 <code>RSTART</code> 和 <code>RLENGTH</code></td>
+</tr>
+<tr>
+<td><code>tolower(s)</code> / <code>toupper(s)</code></td>
+<td>大小写转换</td>
+</tr>
+<tr>
+<td><code>sprintf(fmt, ...)</code></td>
+<td>格式化后返回字符串</td>
+</tr>
+<tr>
+<td><code>system(cmd)</code></td>
+<td>执行 shell 命令</td>
+</tr>
+</tbody>
+</table>
+<pre class="code-block"><code>$ awk '/sudo/ {sub(/.*COMMAND=/, &quot;&quot;); print}' sample-secure.log
+/usr/bin/dnf update
+$ awk '{gsub(/[0-9]+/, &quot;N&quot;, $5); print $5}' sample-secure.log | sort | uniq -c
+      9 sshd[N]:
+      1 sudo[N]:
+$ awk 'match($0, /port [0-9]+/) {print substr($0, RSTART+5, RLENGTH-5)}' sample-secure.log | head -3
+50122
+50122
+50200
+$ awk 'BEGIN{n=split(&quot;a,b,c&quot;, p, &quot;,&quot;); print n, p[2]}'
+3 b
+</code></pre>
+<h3>自定义函数</h3>
+<pre class="code-block"><code>$ awk 'function ipclass(ip) { return (ip ~ /^(10|192\.168)\./) ? &quot;private&quot; : &quot;public&quot; }
+       /from/ {print $(NF-3), ipclass($(NF-3))}' sample-secure.log | sort -u
+10.0.0.5 private
+192.168.1.10 private
+192.168.1.50 private
+203.0.113.7 public
+</code></pre>
+<h3>多文件处理：NR==FNR</h3>
+<p>读第一个文件时 <code>NR</code> 等于 <code>FNR</code>，借此先把查找表载入数组，再处理第二个文件。这相当于两个文件之间的 join：</p>
+<pre class="code-block"><code>$ printf '192.168.1.50 lab-gateway\n203.0.113.7 external-scanner\n' &gt; known-hosts.txt
+$ awk 'NR==FNR {name[$1]=$2; next}
+       /Failed/ {ip=$(NF-3); print ip, (ip in name ? name[ip] : &quot;unknown&quot;)}' \
+      known-hosts.txt sample-secure.log | sort | uniq -c
+      1 192.168.1.10 unknown
+      3 192.168.1.50 lab-gateway
+      3 203.0.113.7 external-scanner
+</code></pre>
+<p><code>next</code> 立即开始处理下一条记录，跳过后面的规则。</p>
+<h3>改变记录分隔符</h3>
+<p><code>RS=""</code> 进入段落模式，以空行分隔记录。配合 <code>FS="\n"</code>，每一行就是一个字段：</p>
+<pre class="code-block"><code>$ printf 'name: a\nage: 1\n\nname: b\nage: 2\n' | awk 'BEGIN{RS=&quot;&quot;; FS=&quot;\n&quot;} {print NR&quot;: &quot;$1&quot; / &quot;$2}'
+1: name: a / age: 1
+2: name: b / age: 2
+</code></pre>
+<h3>getline</h3>
+<p><code>getline</code> 主动读取输入，常用于 BEGIN 块中读取其他文件或命令输出：</p>
+<pre class="code-block"><code>awk 'BEGIN { while ((getline line &lt; &quot;known-hosts.txt&quot;) &gt; 0) n++; print n }'   # 输出 2
+awk 'BEGIN { &quot;date +%Y&quot; | getline y; close(&quot;date +%Y&quot;); print &quot;year:&quot;, y }'
+</code></pre>
+<p><code>getline</code> 成功返回 1、到达结尾返回 0、出错返回 -1，所以循环条件写 <code>&gt; 0</code>，避免文件不存在时死循环。用完命令或文件后调用 <code>close()</code>。大多数场景用 <code>NR==FNR</code> 更简单。</p>
+<h3>在脚本中：统计并格式化报告</h3>
+<pre class="code-block"><code>report=$(awk -v limit=&quot;$threshold&quot; '
+    {
+        ip = $11; user = $9
+        fails[ip]++
+        if (!seen[ip, user]++)
+            users[ip] = users[ip] (users[ip] ? &quot;,&quot; : &quot;&quot;) user
+    }
+    END {
+        for (ip in fails)
+            printf &quot;%-15s %5d  %-20s %s\n&quot;, ip, fails[ip], users[ip],
+                   (fails[ip] &gt;= limit ? &quot;ALERT&quot; : &quot;ok&quot;)
+    }' &lt;&lt;&lt; &quot;$failed&quot; | sort -k2,2nr -k1,1)
+</code></pre>
+<ul>
+<li><code>-v limit=</code> 把 shell 中的阈值传入 awk。</li>
+<li><code>fails[ip]++</code> 按 IP 计数；<code>seen[ip, user]</code> 给每个 IP 的用户名去重，<code>users[ip]</code> 用逗号拼接。</li>
+<li>awk 中把两个字符串并排写就是拼接；三元表达式 <code>cond ? a : b</code> 决定状态。</li>
+<li><code>sort -k2,2nr -k1,1</code> 先按第 2 列数值倒序，再按 IP 排序，保证输出稳定。</li>
+</ul>
+          </section>
+          <section id="full-script">
+<h2>完整脚本</h2>
+<pre class="code-block"><code>#!/bin/bash
+# log-audit.sh - summarize SSH login activity from secure-style logs
+set -euo pipefail
+
+usage() {
+    echo &quot;Usage: $(basename &quot;$0&quot;) LOGFILE...&quot; &gt;&amp;2
+    echo &quot;Env:   THRESHOLD=N (default 3)  OUTPUT=FILE (write report to FILE)&quot; &gt;&amp;2
+    exit 1
+}
+
+[ $# -ge 1 ] || usage
+threshold=${THRESHOLD:-3}
+[[ $threshold =~ ^[0-9]+$ ]] || { echo &quot;error: THRESHOLD must be a number&quot; &gt;&amp;2; exit 1; }
+
+for file in &quot;$@&quot;; do
+    if [ ! -r &quot;$file&quot; ]; then
+        echo &quot;error: cannot read $file&quot; &gt;&amp;2
+        exit 1
+    fi
+done
+
+if [ -n &quot;${OUTPUT:-}&quot; ]; then
+    exec &gt; &quot;$OUTPUT&quot;
+fi
+
+failed=$(grep -hE 'sshd\[[0-9]+\]: Failed password' &quot;$@&quot; \
+    | sed -E 's/ for invalid user / for /' || true)
+accepted=$(grep -hE 'sshd\[[0-9]+\]: Accepted ' &quot;$@&quot; || true)
+
+if [ -z &quot;$failed&quot; ]; then
+    failed_total=0
+else
+    failed_total=$(wc -l &lt;&lt;&lt; &quot;$failed&quot;)
+fi
+
+echo &quot;== SSH audit: $# file(s), threshold=$threshold ==&quot;
+echo &quot;Failed attempts: $failed_total&quot;
+echo
+echo &quot;-- Failed logins by source IP --&quot;
+printf '%-15s %5s  %-20s %s\n' &quot;IP&quot; &quot;FAILS&quot; &quot;USERS&quot; &quot;STATUS&quot;
+
+report=&quot;&quot;
+if [ &quot;$failed_total&quot; -gt 0 ]; then
+    report=$(awk -v limit=&quot;$threshold&quot; '
+        {
+            ip = $11; user = $9
+            fails[ip]++
+            if (!seen[ip, user]++)
+                users[ip] = users[ip] (users[ip] ? &quot;,&quot; : &quot;&quot;) user
+        }
+        END {
+            for (ip in fails)
+                printf &quot;%-15s %5d  %-20s %s\n&quot;, ip, fails[ip], users[ip],
+                       (fails[ip] &gt;= limit ? &quot;ALERT&quot; : &quot;ok&quot;)
+        }' &lt;&lt;&lt; &quot;$failed&quot; | sort -k2,2nr -k1,1)
+    echo &quot;$report&quot;
+fi
+
+echo
+echo &quot;-- Successful logins --&quot;
+if [ -n &quot;$accepted&quot; ]; then
+    awk '{ print $9, $11, $7 }' &lt;&lt;&lt; &quot;$accepted&quot; | sort | uniq -c |
+    while read -r count user ip method; do
+        printf '%-10s from %-15s via %-9s x%d\n' &quot;$user&quot; &quot;$ip&quot; &quot;$method&quot; &quot;$count&quot;
+    done
+else
+    echo &quot;(none)&quot;
+fi
+
+alerts=$(grep -c 'ALERT$' &lt;&lt;&lt; &quot;$report&quot; || true)
+if [ &quot;$alerts&quot; -gt 0 ]; then
+    echo &quot;$alerts source(s) reached the threshold&quot; &gt;&amp;2
+    exit 2
+fi
+exit 0
+</code></pre>
+<h3>运行与退出码</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>命令</th>
+<th>退出码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有来源达到阈值</td>
+<td><code>./log-audit.sh sample-secure.log</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>提高阈值后无告警</td>
+<td><code>THRESHOLD=5 ./log-audit.sh sample-secure.log</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td>未给参数</td>
+<td><code>./log-audit.sh</code></td>
+<td>1，stderr 输出用法</td>
+</tr>
+<tr>
+<td>文件不可读</td>
+<td><code>./log-audit.sh nope.log</code></td>
+<td>1，<code>error: cannot read nope.log</code></td>
+</tr>
+<tr>
+<td>阈值不是数字</td>
+<td><code>THRESHOLD=x ./log-audit.sh sample-secure.log</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>报告写入文件</td>
+<td><code>OUTPUT=report.txt ./log-audit.sh sample-secure.log</code></td>
+<td>2，告警提示仍显示在终端</td>
+</tr>
+</tbody>
+</table>
+<p>告警提示写到 stderr，所以 <code>OUTPUT=report.txt</code> 时报告进文件，提示仍显示在终端上。放进 cron 时可以这样用：</p>
+<pre class="code-block"><code>./log-audit.sh /var/log/secure &gt; /tmp/audit.txt 2&gt;&amp;1 || [ $? -ne 2 ] || mail -s &quot;SSH alert&quot; root &lt; /tmp/audit.txt
+</code></pre>
+<h3>可以继续练习的方向</h3>
+<ul>
+<li>加一个 <code>-t N</code> 命令行选项代替环境变量（用 <code>getopts</code>）。</li>
+<li>支持读取 <code>/var/log/secure-*</code> 轮转文件，或用 <code>journalctl -u sshd</code> 作为输入。</li>
+<li>用 <code>NR==FNR</code> 加载 IP 白名单，白名单中的地址不告警。</li>
+</ul>
+          </section>
+          <section id="cheatsheet">
+<h2>速查表</h2>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>写法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stdout 和 stderr 都写进文件</td>
+<td><code>cmd &gt; file 2&gt;&amp;1</code> 或 <code>cmd &amp;&gt; file</code></td>
+</tr>
+<tr>
+<td>丢弃错误</td>
+<td><code>cmd 2&gt;/dev/null</code></td>
+</tr>
+<tr>
+<td>错误信息写到 stderr</td>
+<td><code>echo "error" &gt;&amp;2</code></td>
+</tr>
+<tr>
+<td>保存并继续传递</td>
+<td><code>cmd \| tee file \| next</code></td>
+</tr>
+<tr>
+<td>stdin 转参数</td>
+<td><code>... \| xargs -I {} cmd {}</code></td>
+</tr>
+<tr>
+<td>变量默认值</td>
+<td><code>${VAR:-default}</code></td>
+</tr>
+<tr>
+<td>遍历所有参数</td>
+<td><code>for a in "$@"</code></td>
+</tr>
+<tr>
+<td>按行读文件</td>
+<td><code>while read -r line; do ...; done &lt; file</code></td>
+</tr>
+<tr>
+<td>整数运算</td>
+<td><code>$(( a * 3 ))</code>，<code>(( a &gt; b ))</code></td>
+</tr>
+<tr>
+<td>正则判断</td>
+<td><code>[[ $s =~ ^[0-9]+$ ]]</code></td>
+</tr>
+<tr>
+<td>静默判断是否匹配</td>
+<td><code>if grep -q pat file</code></td>
+</tr>
+<tr>
+<td>只取匹配部分</td>
+<td><code>grep -oE 'pat'</code></td>
+</tr>
+<tr>
+<td>打印第 N 行</td>
+<td><code>sed -n 'Np'</code></td>
+</tr>
+<tr>
+<td>替换全部并备份</td>
+<td><code>sed -i.bak 's/old/new/g' file</code></td>
+</tr>
+<tr>
+<td>删除匹配行</td>
+<td><code>sed '/pat/d'</code></td>
+</tr>
+<tr>
+<td>区间打印</td>
+<td><code>sed -n '/start/,/end/p'</code></td>
+</tr>
+<tr>
+<td>反转行序</td>
+<td><code>sed -n '1!G;h;$p'</code></td>
+</tr>
+<tr>
+<td>打印某几列</td>
+<td><code>awk '{print $1, $NF}'</code></td>
+</tr>
+<tr>
+<td>指定分隔符</td>
+<td><code>awk -F: '{print $1}'</code></td>
+</tr>
+<tr>
+<td>分组计数</td>
+<td><code>awk '{c[$1]++} END {for (k in c) print k, c[k]}'</code></td>
+</tr>
+<tr>
+<td>去重保序</td>
+<td><code>awk '!seen[$0]++'</code></td>
+</tr>
+<tr>
+<td>传入 shell 变量</td>
+<td><code>awk -v n="$n" '$3 &gt; n'</code></td>
+</tr>
+<tr>
+<td>两文件关联</td>
+<td><code>awk 'NR==FNR {m[$1]=$2; next} {print $0, m[$1]}' a b</code></td>
+</tr>
+<tr>
+<td>计数排行</td>
+<td><code>... \| sort \| uniq -c \| sort -rn</code></td>
+</tr>
+</tbody>
+</table>
+          </section>
+        </article>
+
+        <aside class="kb-toc" aria-label="On this page" data-i18n-attr="aria-label:notes.tocLabel">
+          <p class="kb-label" data-i18n="notes.tocLabel">本页目录</p>
+          <ul>
+            <li><a href="#goal">目标与样例数据</a></li>
+            <li><a href="#first-script">第一个脚本</a></li>
+            <li><a href="#io">I/O 通道与重定向</a></li>
+            <li><a href="#pipes">管道、tee 与 xargs</a></li>
+            <li><a href="#variables">变量、引用与环境</a></li>
+            <li><a href="#args-exit">参数、退出码与 exec</a></li>
+            <li><a href="#tests">测试与条件判断</a></li>
+            <li><a href="#loops">循环</a></li>
+            <li><a href="#grep-regex">正则表达式与 grep</a></li>
+            <li><a href="#sed">sed 进阶</a></li>
+            <li><a href="#awk">awk 进阶</a></li>
+            <li><a href="#full-script">完整脚本</a></li>
+            <li><a href="#cheatsheet">速查表</a></li>
+          </ul>
+          <a class="text-link" href="https://github.com/hzhan516/hzhan516.github.io" target="_blank" rel="noreferrer" data-i18n="notes.editSource">Edit on GitHub ↗</a>
+        </aside>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-wrap">
+        <p>&copy; <span data-year></span> <span data-i18n="common.name">Hansheng Zhang (Doyle)</span>.</p>
+        <div class="footer-links">
+          <a href="mailto:doyle_zhang@outlook.com" data-i18n="common.footerEmail">doyle_zhang@outlook.com</a>
+          <a href="../index.html" data-i18n="common.footerHome">Home</a>
+          <a href="../resume.html" data-i18n="common.footerResume">Resume</a>
+          <a href="https://github.com/hzhan516/medmemo" target="_blank" rel="noreferrer" data-i18n="common.footerMedMemoGitHub">MedMemo GitHub</a>
+          <a href="https://github.com/hzhan516/JobCopilot" target="_blank" rel="noreferrer" data-i18n="common.footerJobCopilotGitHub">JobCopilot GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
