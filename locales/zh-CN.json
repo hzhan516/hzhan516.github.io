@@ -18,7 +18,9 @@
     "footerEmail": "doyle_zhang@outlook.com",
     "footerMedMemoGitHub": "MedMemo GitHub",
     "footerJobCopilotGitHub": "JobCopilot GitHub",
-    "menuToggle": "切换菜单"
+    "menuToggle": "切换菜单",
+    "navNotes": "笔记",
+    "navWriting": "文章"
   },
   "meta": {
     "index": {
@@ -36,6 +38,14 @@
     "jobcopilot": {
       "title": "JobCopilot | 张瀚生（Hansheng Zhang / Doyle）",
       "description": "JobCopilot 项目页：张瀚生（Hansheng Zhang / Doyle）参与维护的 AI 求职平台。"
+    },
+    "notes": {
+      "title": "笔记 | 张瀚生（Hansheng Zhang / Doyle）",
+      "description": "张瀚生（Hansheng Zhang / Doyle）的工程知识库。"
+    },
+    "writing": {
+      "title": "文章 | 张瀚生（Hansheng Zhang / Doyle）",
+      "description": "张瀚生（Hansheng Zhang / Doyle）的文章。"
     }
   },
   "index": {
@@ -86,7 +96,11 @@
     "codeComment": "作品集要点",
     "aboutTitle": "关于我",
     "aboutBody": "张瀚生（Doyle）· 软件工程 · AI 应用",
-    "aboutCta": "查看我的简历 ↗"
+    "aboutCta": "查看我的简历 ↗",
+    "notebookEyebrow": "01 / 笔记本",
+    "notebookTitle": "知识库最近更新",
+    "notebookAll": "全部笔记 →",
+    "notebookWriting": "查看文章页 →"
   },
   "resume": {
     "eyebrow": "简历",
@@ -214,5 +228,41 @@
     "stackBody": "Java/Spring Boot 后端与 Python/FastAPI AI 服务。",
     "resultTitle": "简历编辑与事务处理",
     "resultBody": "修复简历编辑流程，在数据库事务提交后触发向量生成，使外部 AI 调用位于事务边界之外。"
+  },
+  "notes": {
+    "sidebarAria": "知识库导航",
+    "searchLabel": "搜索笔记",
+    "searchPlaceholder": "搜索知识库…",
+    "library": "目录",
+    "overview": "总览",
+    "cat_ai": "AI 工程",
+    "cat_backend": "后端工程",
+    "cat_linux": "Linux 与系统",
+    "cat_cloud": "云与 DevOps",
+    "cat_workflow": "工程工作流",
+    "emptyCategory": "暂无笔记",
+    "cardTitle": "笔记即代码",
+    "cardBody": "用 HTML 编写，Git 管理版本，通过 GitHub Pages 发布。",
+    "breadcrumb": "笔记",
+    "title": "知识库",
+    "lead": "按主题整理的工程笔记。",
+    "tagLibrary": "目录",
+    "topicsTitle": "主题",
+    "recentTitle": "最近更新",
+    "emptyTitle": "笔记整理中",
+    "emptyBody": "首批笔记发布后会显示在这里。",
+    "tocLabel": "本页内容",
+    "viewSource": "在 GitHub 查看 ↗",
+    "editSource": "在 GitHub 编辑 ↗"
+  },
+  "writing": {
+    "eyebrow": "文章",
+    "title": "文章",
+    "kicker": "关于工程实践与项目决策的长文。",
+    "toNotes": "浏览笔记",
+    "listEyebrow": "01 / 文章",
+    "listTitle": "最新文章",
+    "emptyTitle": "文章整理中",
+    "emptyBody": "新文章发布后会列在这里。"
   }
 }

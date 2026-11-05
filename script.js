@@ -2,7 +2,13 @@ const SUPPORTED_LANGUAGES = ["en", "zh-CN"];
 const DEFAULT_LANGUAGE = "en";
 const STORAGE_KEY = "portfolio-language";
 
-const path = window.location.pathname.split("/").pop() || "index.html";
+const LOCALE_BASE = new URL("./locales/", document.currentScript.src);
+
+function normalizePath(pathname) {
+  return pathname.endsWith("/") ? `${pathname}index.html` : pathname;
+}
+
+const currentPath = normalizePath(window.location.pathname);
 
 function getNestedValue(source, key) {
   return key.split(".").reduce((value, part) => {
@@ -27,7 +33,7 @@ function getPreferredLanguage() {
 
 async function loadMessages(language) {
   try {
-    const response = await fetch(`./locales/${language}.json`, { cache: "no-cache" });
+    const response = await fetch(new URL(`${language}.json`, LOCALE_BASE), { cache: "no-cache" });
     if (!response.ok) {
       throw new Error(`Unable to load locale ${language}`);
     }
@@ -89,11 +95,22 @@ async function setLanguage(language) {
 }
 
 document.querySelectorAll("[data-nav]").forEach((link) => {
-  const href = link.getAttribute("href");
-  if (href === path || (path === "" && href === "index.html")) {
+  const linkPath = normalizePath(new URL(link.getAttribute("href"), window.location.href).pathname);
+  const section = link.dataset.navSection;
+  if (linkPath === currentPath || (section && currentPath.includes(`/${section}/`))) {
     link.setAttribute("aria-current", "page");
   }
 });
+
+const kbSearch = document.querySelector("[data-kb-search]");
+if (kbSearch) {
+  kbSearch.addEventListener("input", () => {
+    const query = kbSearch.value.trim().toLowerCase();
+    document.querySelectorAll(".kb-sidebar .kb-nav li").forEach((item) => {
+      item.hidden = query !== "" && !item.textContent.toLowerCase().includes(query);
+    });
+  });
+}
 
 document.querySelectorAll("[data-year]").forEach((node) => {
   node.textContent = new Date().getFullYear();

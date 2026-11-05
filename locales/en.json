@@ -18,7 +18,9 @@
     "footerEmail": "doyle_zhang@outlook.com",
     "footerMedMemoGitHub": "MedMemo GitHub",
     "footerJobCopilotGitHub": "JobCopilot GitHub",
-    "menuToggle": "Toggle menu"
+    "menuToggle": "Toggle menu",
+    "navNotes": "Notes",
+    "navWriting": "Writing"
   },
   "meta": {
     "index": {
@@ -36,6 +38,14 @@
     "jobcopilot": {
       "title": "JobCopilot | Hansheng Zhang (Doyle)",
       "description": "JobCopilot project page: an AI-powered job-search platform by Hansheng Zhang (Doyle)."
+    },
+    "notes": {
+      "title": "Notes | Hansheng Zhang (Doyle)",
+      "description": "Engineering knowledge base by Hansheng Zhang (Doyle)."
+    },
+    "writing": {
+      "title": "Writing | Hansheng Zhang (Doyle)",
+      "description": "Articles by Hansheng Zhang (Doyle)."
     }
   },
   "index": {
@@ -86,7 +96,11 @@
     "codeComment": "portfolio highlights",
     "aboutTitle": "About me",
     "aboutBody": "Hansheng Zhang (Doyle) · Software engineering · AI applications",
-    "aboutCta": "Read my resume ↗"
+    "aboutCta": "Read my resume ↗",
+    "notebookEyebrow": "01 / The notebook",
+    "notebookTitle": "Recently in the knowledge base",
+    "notebookAll": "All notes →",
+    "notebookWriting": "Read the writing page →"
   },
   "resume": {
     "eyebrow": "Resume",
@@ -214,5 +228,41 @@
     "stackBody": "Java/Spring Boot backend and Python/FastAPI AI services.",
     "resultTitle": "Resume Editing and Transaction Handling",
     "resultBody": "Fixed resume editing by triggering vector generation after the database transaction commits, keeping external AI calls outside the transaction boundary."
+  },
+  "notes": {
+    "sidebarAria": "Knowledge base navigation",
+    "searchLabel": "Search notes",
+    "searchPlaceholder": "Search the knowledge base…",
+    "library": "Library",
+    "overview": "Overview",
+    "cat_ai": "AI Engineering",
+    "cat_backend": "Backend Engineering",
+    "cat_linux": "Linux & System",
+    "cat_cloud": "Cloud & DevOps",
+    "cat_workflow": "Engineering Workflow",
+    "emptyCategory": "No notes yet",
+    "cardTitle": "Notes as code",
+    "cardBody": "Written in HTML, versioned in Git, published with GitHub Pages.",
+    "breadcrumb": "Notes",
+    "title": "Knowledge Base",
+    "lead": "Engineering notes organized by topic.",
+    "tagLibrary": "Library",
+    "topicsTitle": "Topics",
+    "recentTitle": "Recently updated",
+    "emptyTitle": "Notes are on the way",
+    "emptyBody": "The first notes will appear here once they are published.",
+    "tocLabel": "On this page",
+    "viewSource": "View on GitHub ↗",
+    "editSource": "Edit on GitHub ↗"
+  },
+  "writing": {
+    "eyebrow": "Writing",
+    "title": "Writing",
+    "kicker": "Longer articles on engineering work and project decisions.",
+    "toNotes": "Browse notes",
+    "listEyebrow": "01 / Articles",
+    "listTitle": "Latest articles",
+    "emptyTitle": "Articles are on the way",
+    "emptyBody": "New articles will be listed here once they are published."
   }
 }

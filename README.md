@@ -10,6 +10,33 @@ in English and Simplified Chinese.
 - `resume.html` - resume page
 - `medmemo.html` - MedMemo project page
 - `jobcopilot.html` - JobCopilot project page
+- `notes.html` - knowledge base index (sidebar categories, search, table of contents)
+- `writing.html` - article list
+
+## Adding Notes And Articles
+
+The knowledge base and writing pages ship with empty states and are ready for content.
+
+1. Copy `notes/_template.html` to `notes/<slug>.html` (or `writing/_template.html` to
+   `writing/<slug>.html`), fill in the `[bracketed]` placeholders, and remove the
+   `<meta name="robots" content="noindex">` line.
+2. In the copied note, add `aria-current="page"` to its own sidebar link.
+3. Link the note from every sidebar category list (`<ul class="kb-nav" data-category="...">`)
+   in `notes.html` and the existing note pages, replacing the `kb-empty` item.
+4. Replace the `empty-state` block inside `[data-notes-list]` (in `notes.html` and
+   `index.html`) or `[data-posts-list]` (in `writing.html`) with cards such as:
+
+   ```html
+   <article class="route-card post-card">
+     <p class="eyebrow">AI Engineering</p>
+     <h3>Note title</h3>
+     <p>Short summary.</p>
+     <a class="text-link" href="./notes/slug.html">Read note →</a>
+   </article>
+   ```
+
+Article body text is written directly in HTML and does not go through the locale files.
+Pages inside `notes/` and `writing/` use `../` paths for shared assets.
 
 ## Internationalization
 
