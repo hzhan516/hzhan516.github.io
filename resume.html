@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Resume for Hansheng Zhang (Doyle), AI backend and software engineering candidate." data-i18n-attr="content:meta.resume.description">
+    <meta name="description" content="Resume for Hansheng Zhang (Doyle): education, work experience, and AI and backend projects." data-i18n-attr="content:meta.resume.description">
     <title data-i18n="meta.resume.title">Hansheng Zhang (Doyle) | Resume</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,7 +49,7 @@
           <p class="eyebrow" data-i18n="resume.eyebrow">Resume</p>
           <h1 class="page-title" data-i18n="resume.title">AI Application and Backend Developer</h1>
           <p class="page-kicker" data-i18n="resume.kicker">
-            Go, Java, Python, React, LLM integration, semantic retrieval, and containerized services.
+            Java, Go, Python, React / TypeScript, LLM integration, RAG retrieval, and reliability components.
           </p>
           <div class="inline-actions">
             <a class="button" href="https://github.com/hzhan516" target="_blank" rel="noreferrer" data-i18n="resume.githubProfile">GitHub profile</a>
@@ -93,26 +93,28 @@
                   <div class="tag-row">
                     <span class="tag">Spring Boot</span>
                     <span class="tag">FastAPI</span>
+                    <span class="tag">Fastify</span>
                     <span class="tag">REST APIs</span>
-                    <span class="tag">DDD</span>
                   </div>
                 </div>
                 <div class="skill-group">
                   <h3 data-i18n="resume.aiData">AI / Data</h3>
                   <div class="tag-row">
-                    <span class="tag">LiteLLM</span>
-                    <span class="tag">ONNX Runtime</span>
+                    <span class="tag">LLM APIs</span>
+                    <span class="tag">RAG</span>
                     <span class="tag">pgvector</span>
-                    <span class="tag">XGBoost</span>
+                    <span class="tag">sqlite-vec</span>
+                    <span class="tag">MCP</span>
                   </div>
                 </div>
                 <div class="skill-group">
                   <h3 data-i18n="resume.platform">Platform</h3>
                   <div class="tag-row">
-                    <span class="tag">Docker</span>
-                    <span class="tag">Nginx</span>
+                    <span class="tag">Docker Compose</span>
                     <span class="tag">GitHub Actions</span>
                     <span class="tag">Linux</span>
+                    <span class="tag">Kubernetes</span>
+                    <span class="tag">RabbitMQ</span>
                   </div>
                 </div>
               </div>
@@ -136,106 +138,148 @@
 
           <div class="resume-main">
             <section class="resume-block" aria-labelledby="profile-heading">
-              <h2 id="profile-heading" data-i18n="resume.profileHeading">Profile</h2>
-              <p data-i18n="resume.profileP1">
-                M.S. Software Engineering candidate at Arizona State University, expected December 2026, with experience developing AI backends, desktop applications, and full-stack workflows.
-              </p>
-              <p data-i18n="resume.profileP2">
-                Primary developer of MedMemo and major contributor and maintainer of JobCopilot, working on conversational memory, semantic retrieval, asynchronous AI processing, and frontend-backend integration.
-              </p>
+              <h2 id="profile-heading" data-i18n="resume.profileHeading">Summary</h2>
+              <ul class="resume-list">
+                <li data-i18n="resume.summary1">M.S. Software Engineering candidate at Arizona State University, expected December 2026, with professional experience in cloud computing technical training and systems operations.</li>
+                <li data-i18n="resume.summary2">Focused on AI applications and backend engineering, using Java, Go, and Python to build LLM integration, RAG retrieval, conversation context management, and reliability components.</li>
+                <li data-i18n="resume.summary3">Contributed to startup collaboration projects in Seattle and New York. Apply systematic troubleshooting and engineering discipline from requirements breakdown and interface design through implementation and failure-scenario verification, delivering features through transaction fixes, idempotent recovery, retrieval fallback, and build troubleshooting.</li>
+              </ul>
             </section>
 
             <section class="resume-block" aria-labelledby="education-heading">
               <h2 id="education-heading" data-i18n="resume.education">Education</h2>
-              <ul class="resume-list">
-                <li>
-                  <strong data-i18n="resume.asuSchool">Arizona State University</strong>
-                  <span data-i18n="resume.asuDegree">M.S. Software Engineering, expected December 2026. GPA 3.70 / 4.00; 33 graduate credits completed as of June 2026.</span>
-                </li>
-                <li>
-                  <strong data-i18n="resume.sandaSchool">Sanda University</strong>
-                  <span data-i18n="resume.sandaDegree">Bachelor of Engineering, Computer Science and Technology, completed June 2022.</span>
-                </li>
-              </ul>
-            </section>
-
-            <section class="resume-block" aria-labelledby="projects-heading">
-              <h2 id="projects-heading" data-i18n="resume.selectedProjects">Selected Projects</h2>
-              <div class="project-grid">
-                <article class="project-card">
-                  <div class="project-head">
-                    <img class="project-logo" src="./assets/medmemo-icon.png" alt="MedMemo app icon" data-i18n-attr="alt:medmemo.iconAlt">
-                    <div>
-                      <h3>MedMemo</h3>
-                      <p data-i18n="resume.medmemoSubtitle">Privacy-first health memory assistant</p>
-                    </div>
-                  </div>
-                  <p data-i18n="resume.medmemoSummary">
-                    Built a health memory desktop application as the primary developer, connecting Go business logic with a React/TypeScript interface through Wails.
-                  </p>
-                  <ul class="resume-list">
-                    <li data-i18n="resume.medmemoMemory">Implemented three memory layers with vector and keyword retrieval to recall relevant information from earlier conversations.</li>
-                    <li data-i18n="resume.medmemoChat">Integrated model providers, streaming responses, and summary compression to manage conversation context across chat sessions.</li>
-                    <li data-i18n="resume.medmemoDelivery">Added memory and privacy workflow tests and fixed Windows packaging and CI issues to support repeatable desktop builds.</li>
-                  </ul>
-                  <div class="tag-row">
-                    <span class="tag">Go</span>
-                    <span class="tag">Wails</span>
-                    <span class="tag">React</span>
-                    <span class="tag">ONNX Runtime</span>
-                  </div>
-                  <a class="text-link" href="./medmemo.html" data-i18n="resume.projectPage">Project page →</a>
-                </article>
-
-                <article class="project-card">
-                  <div class="project-head">
-                    <img class="project-logo" src="./assets/jobcopilot-mark.svg" alt="JobCopilot project mark" data-i18n-attr="alt:jobcopilot.markAlt">
-                    <div>
-                      <h3>JobCopilot</h3>
-                      <p data-i18n="resume.jobcopilotSubtitle">AI-powered job-search platform</p>
-                    </div>
-                  </div>
-                  <p data-i18n="resume.jobcopilotSummary">
-                    Developed and maintained resume and job-search workflows as a major contributor, connecting React, Spring Boot, and FastAPI through REST APIs.
-                  </p>
-                  <ul class="resume-list">
-                    <li data-i18n="resume.jobcopilotMatching">Integrated PostgreSQL/pgvector retrieval to match resume content with job descriptions and support AI-assisted job search.</li>
-                    <li data-i18n="resume.jobcopilotAsync">Used RabbitMQ workers and Redis to separate long-running AI processing from user-facing API workflows.</li>
-                    <li data-i18n="resume.jobcopilotTransactions">Fixed resume-edit transaction handling by deferring vector generation until after commit, keeping external AI calls outside the database transaction.</li>
-                  </ul>
-                  <div class="tag-row">
-                    <span class="tag">Java 25</span>
-                    <span class="tag">FastAPI</span>
-                    <span class="tag">pgvector</span>
-                    <span class="tag">RabbitMQ</span>
-                  </div>
-                  <a class="text-link" href="./jobcopilot.html" data-i18n="resume.projectPage">Project page →</a>
-                </article>
+              <div class="resume-entry">
+                <div class="entry-head">
+                  <h3 data-i18n="resume.asuSchool">Arizona State University</h3>
+                  <span class="entry-meta"><span data-i18n="resume.asuDegree">M.S. Software Engineering</span> · 2024.08 - 2026.12</span>
+                </div>
+                <ul class="resume-list">
+                  <li data-i18n="resume.asuGpa">GPA: 3.70 / 4.0</li>
+                  <li><strong data-i18n="resume.courseworkLabel">Core coursework</strong> <span data-i18n="resume.courseworkBody">Artificial Intelligence, Statistical Machine Learning, Cloud Computing, Data Processing at Scale, Foundations of Algorithms, Software Security, Data Science for Software Engineers, and AI for Software Engineers.</span></li>
+                </ul>
+              </div>
+              <div class="resume-entry">
+                <div class="entry-head">
+                  <h3 data-i18n="resume.sandaSchool">Sanda University</h3>
+                  <span class="entry-meta"><span data-i18n="resume.sandaDegree">B.E. Computer Science and Technology, full-time</span> · 2017.09 - 2022.06</span>
+                </div>
+                <ul class="resume-list">
+                  <li><strong data-i18n="resume.awardsLabel">Awards</strong> <span data-i18n="resume.awardsBody">National Second Prize, Chinese Collegiate Computing Competition; Shanghai Third Prize, China Undergraduate Mathematical Contest in Modeling.</span></li>
+                </ul>
               </div>
             </section>
 
-            <section class="resume-block" aria-labelledby="coursework-heading">
-              <h2 id="coursework-heading" data-i18n="resume.coursework">Graduate Coursework</h2>
+            <section class="resume-block" aria-labelledby="work-heading">
+              <h2 id="work-heading" data-i18n="resume.workHeading">Work Experience</h2>
+              <div class="resume-entry">
+                <div class="entry-head">
+                  <h3 data-i18n="resume.tengkeTitle">Shanghai Tengke Education Technology Co., Ltd. | Cloud Computing Instructor</h3>
+                  <span class="entry-meta">2022.03 - 2025.01</span>
+                </div>
+                <ul class="resume-list">
+                  <li data-i18n="resume.tengke1">Delivered certification and corporate training courses in RHCE, ZStack ZCCE, Alibaba Cloud ACP-Cloud, and related tracks, covering technical instruction and hands-on lab guidance.</li>
+                  <li data-i18n="resume.tengke2">Built and maintained lab equipment and cloud computing lab environments for course demonstrations and student practice.</li>
+                  <li data-i18n="resume.tengke3">Wrote automated deployment scripts for lab environments to support repeatable setup of teaching environments.</li>
+                </ul>
+              </div>
+              <div class="resume-entry">
+                <div class="entry-head">
+                  <h3 data-i18n="resume.eastcomTitle">Hangzhou Eastcom Software Co., Ltd. | Systems Operations Engineer</h3>
+                  <span class="entry-meta">2020.08 - 2021.01</span>
+                </div>
+                <ul class="resume-list">
+                  <li data-i18n="resume.eastcom1">Supported the launch, version updates, and routine maintenance of Mobile Cloud Portal 2.0, handling runtime issues to keep the portal running and iterating.</li>
+                  <li data-i18n="resume.eastcom2">Communicated project issues and requirements, helping the development team understand on-site problems and maintenance needs for follow-up handling.</li>
+                  <li data-i18n="resume.eastcom3">Set up monitoring environments and assisted with development-environment and data testing to support issue diagnosis and release verification.</li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="resume-block" aria-labelledby="projects-heading">
+              <h2 id="projects-heading" data-i18n="resume.projectsHeading">Projects</h2>
+              <div class="resume-entry">
+                <div class="entry-head">
+                  <h3 data-i18n="resume.skillManagerTitle">Skill Manager - AI Agent Skill Management Tool</h3>
+                  <span class="entry-meta"><span data-i18n="resume.skillManagerMeta">2026.10 - 2026.11 | Personal project - Requirements design and development</span></span>
+                </div>
+                <div class="tag-row"><span class="tag">TypeScript</span><span class="tag">Node.js</span><span class="tag">Fastify</span><span class="tag">React</span><span class="tag">SQLite</span><span class="tag">MCP</span></div>
+                <p><strong data-i18n="resume.projectBackground">Background: </strong><span data-i18n="resume.skillManagerBackground">Built a unified content library and multi-entry management tool to address scattered, duplicated, and conflicting Skill configurations across multiple AI coding tools.</span></p>
+                <ul class="resume-list">
+                  <li><strong data-i18n="resume.skillManager1Label">Requirements breakdown and acceptance design</strong> <span data-i18n="resume.skillManager1Body">Mapped user journeys and feature boundaries, and organized 56 user stories and 168 acceptance scenarios into an SRS and story map so requirements are traceable and results verifiable.</span></li>
+                  <li><strong data-i18n="resume.skillManager2Label">Unified service and agent access</strong> <span data-i18n="resume.skillManager2Body">Implemented an application service shared by CLI, Web, and MCP entry points, giving users and agents consistent management, search, and read interfaces.</span></li>
+                  <li><strong data-i18n="resume.skillManager3Label">Content consistency and index recovery</strong> <span data-i18n="resume.skillManager3Body">Implemented snapshots, digest verification, and idempotent handling of repeated imports; separated content results from index results and added status queries and rebuild entry points to locate partial failures.</span></li>
+                </ul>
+              </div>
+              <div class="resume-entry">
+                <div class="entry-head">
+                  <h3 data-i18n="resume.voiceTitle">Voice AI Front Desk - AI Voice Intent Screening System</h3>
+                  <span class="entry-meta"><span data-i18n="resume.voiceMeta">2026.08 - Present | Seattle startup collaboration project - Backend development</span></span>
+                </div>
+                <div class="tag-row"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Retell</span><span class="tag">SDK</span><span class="tag">PostgreSQL</span></div>
+                <p><strong data-i18n="resume.projectBackground">Background: </strong><span data-i18n="resume.voiceBackground">Built an AI voice backend for real-estate seller intent screening, handling external call creation, result association, and recovery from unknown outcomes.</span></p>
+                <ul class="resume-list">
+                  <li><strong data-i18n="resume.voice1Label">Call pipeline and dispatch control</strong> <span data-i18n="resume.voice1Body">Implemented the voice service adapter, persisting request snapshots and idempotency keys before dispatch, and controlling concurrent sends with atomic database claims and leases.</span></li>
+                  <li><strong data-i18n="resume.voice2Label">Failure recovery and reconciliation</strong> <span data-i18n="resume.voice2Body">Applied bounded recovery and status queries to unknown outcomes such as lost responses and failed local saves, limiting the risk of duplicate creation and incorrect association.</span></li>
+                  <li><strong data-i18n="resume.voice3Label">Persistence and restart verification</strong> <span data-i18n="resume.voice3Body">Verified recovery paths against real PostgreSQL with a two-process restart scenario and kept failure-handling and verification records; results are limited to local engineering verification, and real calls and deployment have not yet been accepted.</span></li>
+                </ul>
+              </div>
+              <div class="resume-entry">
+                <div class="entry-head">
+                  <h3 data-i18n="resume.smartchainTitle">SmartChain Core - Go / QUIC Communication and Protocol Foundation</h3>
+                  <span class="entry-meta"><span data-i18n="resume.smartchainMeta">2026.06 - 2026.08 | New York startup collaboration project - Go backend development</span></span>
+                </div>
+                <div class="tag-row"><span class="tag">Go</span><span class="tag">QUIC</span><span class="tag">JSON</span><span class="tag">Schema</span><span class="tag">context</span><span class="tag" data-i18n="resume.tagIntegrationTests">Integration tests</span></div>
+                <p><strong data-i18n="resume.projectBackground">Background: </strong><span data-i18n="resume.smartchainBackground">Strengthened the communication and protocol foundation for a startup collaboration project, addressing contract drift, response correlation, and blocking on silent peers.</span></p>
+                <ul class="resume-list">
+                  <li><strong data-i18n="resume.smartchain1Label">Protocol contract and safe responses</strong> <span data-i18n="resume.smartchain1Body">Fixed validation of protocol identifiers, UTF-8, length, and trailing JSON data; implemented response correlation and fixed error messages to reject malformed messages without leaking parsing details.</span></li>
+                  <li><strong data-i18n="resume.smartchain2Label">Stream timeout and cancellation</strong> <span data-i18n="resume.smartchain2Body">Added per-read and per-write timeouts on QUIC streams and handled context cancellation, cleaning up streams by failure stage so blocked requests can exit while the underlying connection stays reusable.</span></li>
+                  <li><strong data-i18n="resume.smartchain3Label">Real-transport regression evidence</strong> <span data-i18n="resume.smartchain3Body">Added tests for agent registration conflicts, timeouts, and cancellation, and synced architecture and verification docs; 2 of my PRs were merged into the development line as milestone component work.</span></li>
+                </ul>
+              </div>
+              <div class="resume-entry">
+                <div class="entry-head">
+                  <h3 data-i18n="resume.medmemoTitle">MedMemo - AI Health Information and Memory Desktop App</h3>
+                  <span class="entry-meta"><span data-i18n="resume.medmemoMeta">2026.05 - 2026.08 | Primary developer, open-source project</span></span>
+                </div>
+                <div class="tag-row"><span class="tag">Go</span><span class="tag">Wails</span><span class="tag">React / TypeScript</span><span class="tag">SQLite / sqlite-vec</span></div>
+                <p><strong data-i18n="resume.projectBackground">Background: </strong><span data-i18n="resume.medmemoBackground">Developed a desktop app that integrates LLMs, knowledge lookup, and memory management for organizing health information and ongoing conversations.</span></p>
+                <ul class="resume-list">
+                  <li><strong data-i18n="resume.medmemo1Label">Model integration and interaction flow</strong> <span data-i18n="resume.medmemo1Body">Connected the Go backend and React frontend through Wails, integrating model APIs and SSE streaming output to support continuous AI conversations.</span></li>
+                  <li><strong data-i18n="resume.medmemo2Label">Hybrid retrieval and dependency fallback</strong> <span data-i18n="resume.medmemo2Body">Implemented hybrid vector and keyword retrieval with candidate reranking; when the vector service is unavailable, keyword results are kept so knowledge queries still work.</span></li>
+                  <li><strong data-i18n="resume.medmemo3Label">Context management and build troubleshooting</strong> <span data-i18n="resume.medmemo3Body">Implemented conversation memory, history compression, and summarization strategies, added automated tests, and fixed Windows DLL lookup and CI packaging issues.</span></li>
+                </ul>
+                <a class="text-link" href="./medmemo.html" data-i18n="resume.projectPage">Project page →</a>
+              </div>
+              <div class="resume-entry">
+                <div class="entry-head">
+                  <h3 data-i18n="resume.jobcopilotTitle">JobCopilot - AI Job-Search Assistant Platform</h3>
+                  <span class="entry-meta"><span data-i18n="resume.jobcopilotMeta">2026.01 - 2026.05 | Major contributor and maintainer, open-source project</span></span>
+                </div>
+                <div class="tag-row"><span class="tag">Java / Spring Boot</span><span class="tag">Python / FastAPI</span><span class="tag">React</span><span class="tag">PostgreSQL</span><span class="tag">RabbitMQ</span></div>
+                <p><strong data-i18n="resume.projectBackground">Background: </strong><span data-i18n="resume.jobcopilotBackground">Contributed to an AI job-search platform, improving features and stability around cross-page chat, long-context handling, and resume editing.</span></p>
+                <ul class="resume-list">
+                  <li><strong data-i18n="resume.jobcopilot1Label">Global AI feature integration</strong> <span data-i18n="resume.jobcopilot1Body">Implemented a Copilot drawer and shared state, adding the chat entry to the main layout so different pages reuse the same chat component.</span></li>
+                  <li><strong data-i18n="resume.jobcopilot2Label">Async summarization and context control</strong> <span data-i18n="resume.jobcopilot2Body">Contributed to token usage tracking, window configuration, and RabbitMQ-based async compression, using prompts to constrain summary facts and format and reusing history summaries in later requests.</span></li>
+                  <li><strong data-i18n="resume.jobcopilot3Label">Transaction issue diagnosis and fix</strong> <span data-i18n="resume.jobcopilot3Body">Used Spring transaction synchronization callbacks to defer vector generation to afterCommit, moving embedding work out of the resume-edit transaction.</span></li>
+                </ul>
+                <a class="text-link" href="./jobcopilot.html" data-i18n="resume.projectPage">Project page →</a>
+              </div>
+            </section>
+
+            <section class="resume-block" aria-labelledby="skills-main-heading">
+              <h2 id="skills-main-heading" data-i18n="resume.skillsHeading">Technical Skills</h2>
               <ul class="resume-list">
-                <li>
-                  <strong data-i18n="resume.graduateCoursework">Graduate coursework</strong>
-                  <span data-i18n="resume.graduateCourseworkBody">Cloud Computing, Statistical Machine Learning, Data Processing at Scale, Artificial Intelligence, Foundations of Algorithms, Software Security, and Data Science for Software Engineers.</span>
-                </li>
+                <li><strong data-i18n="resume.skill1Label">Backend development</strong> <span data-i18n="resume.skill1Body">Project experience with Java / Spring Boot, Python / FastAPI, and Go, covering REST APIs, database access, async tasks, and service integration; connected frontend and backend features with React / TypeScript and Wails.</span></li>
+                <li><strong data-i18n="resume.skill2Label">AI applications and LLMs</strong> <span data-i18n="resume.skill2Body">LLM API integration, prompt design, RAG, hybrid vector and keyword retrieval, and SSE streaming; implemented conversation memory, summarization, and context compression, and used MCP to expose tools to agents.</span></li>
+                <li><strong data-i18n="resume.skill3Label">Data storage and retrieval</strong> <span data-i18n="resume.skill3Body">Used PostgreSQL / pgvector and SQLite / sqlite-vec for business data and vector search; experience with SQL, transaction boundaries, retrieval fallback, and index-state troubleshooting; exposure to Redis caching and RabbitMQ messaging.</span></li>
+                <li><strong data-i18n="resume.skill4Label">Distributed interaction and reliability</strong> <span data-i18n="resume.skill4Body">Idempotent deduplication, atomic claims, leases, bounded recovery, and state reconciliation; experience with Go / QUIC protocol validation, request-response correlation, stream timeouts, and context cancellation.</span></li>
+                <li><strong data-i18n="resume.skill5Label">Engineering practice and collaboration</strong> <span data-i18n="resume.skill5Body">Git, Linux, Docker Compose, and GitHub Actions; wrote unit, integration, and failure regression tests; experience with automated lab-environment deployment, Windows build troubleshooting, and Codex-assisted development; able to write SRS documents, user stories, and acceptance criteria.</span></li>
               </ul>
             </section>
 
-            <section class="resume-block" aria-labelledby="experience-heading">
-              <h2 id="experience-heading" data-i18n="resume.experienceCerts">Experience And Certifications</h2>
-              <ul class="resume-list">
-                <li>
-                  <strong data-i18n="resume.trainingTitle">Cloud and big-data technical training</strong>
-                  <span data-i18n="resume.trainingBody">Taught cloud computing, Linux, data platforms, and software engineering topics to university students and working professionals.</span>
-                </li>
-                <li>
-                  <strong data-i18n="resume.certificationsTitle">Certifications</strong>
-                  <span data-i18n="resume.certificationsBody">RHCA, ZStack ZCCE, and Alibaba ACP-Cloud.</span>
-                </li>
-              </ul>
+            <section class="resume-block" aria-labelledby="certs-heading">
+              <h2 id="certs-heading" data-i18n="resume.certificationsTitle">Certifications</h2>
+              <p data-i18n="resume.certificationsBody">RHCA, CKA, CKS, ZStack ZCCE, and Alibaba ACP-Cloud.</p>
             </section>
           </div>
         </div>

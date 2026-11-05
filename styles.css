@@ -1436,3 +1436,29 @@ main.kb-layout {
     flex-direction: column;
   }
 }
+
+.resume-entry {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.resume-entry + .resume-entry {
+  margin-top: var(--space-6);
+}
+
+.entry-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+}
+
+.entry-head h3 {
+  font-size: 1rem;
+}
+
+.entry-meta {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
