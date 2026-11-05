@@ -105,4 +105,25 @@ document.querySelectorAll("[data-lang-option]").forEach((button) => {
   });
 });
 
+const header = document.querySelector(".site-header");
+const navToggle = document.querySelector(".nav-toggle");
+
+function setMenuOpen(open) {
+  header.classList.toggle("is-open", open);
+  navToggle.setAttribute("aria-expanded", String(open));
+}
+
+if (header && navToggle) {
+  navToggle.addEventListener("click", () => {
+    setMenuOpen(navToggle.getAttribute("aria-expanded") !== "true");
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && header.classList.contains("is-open")) {
+      setMenuOpen(false);
+      navToggle.focus();
+    }
+  });
+}
+
 setLanguage(getPreferredLanguage());

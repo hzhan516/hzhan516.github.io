@@ -7,7 +7,7 @@
     <title data-i18n="meta.medmemo.title">MedMemo | Hansheng Zhang (Doyle)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css">
     <script src="./script.js" defer></script>
   </head>
@@ -22,16 +22,21 @@
             <small data-i18n="common.siteDescription">AI systems portfolio</small>
           </span>
         </a>
-        <nav class="site-nav" aria-label="Primary navigation" data-i18n-attr="aria-label:common.navAria">
-          <a data-nav href="index.html" data-i18n="common.navHome">Home</a>
-          <a data-nav href="resume.html" data-i18n="common.navResume">Resume</a>
-          <a data-nav href="medmemo.html" data-i18n="common.navMedMemo">MedMemo</a>
-          <a data-nav href="jobcopilot.html" data-i18n="common.navJobCopilot">JobCopilot</a>
-          <a href="https://github.com/hzhan516" target="_blank" rel="noreferrer" data-i18n="common.navGitHub">GitHub</a>
-        </nav>
-        <div class="lang-switcher" aria-label="Language selector" data-i18n-attr="aria-label:common.languageSelector">
-          <button type="button" data-lang-option="en" data-i18n="common.languageEnglish">EN</button>
-          <button type="button" data-lang-option="zh-CN" data-i18n="common.languageChinese">简中</button>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle menu" data-i18n-attr="aria-label:common.menuToggle">
+          <span class="nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+        <div class="nav-menu" id="nav-menu">
+          <nav class="site-nav" aria-label="Primary navigation" data-i18n-attr="aria-label:common.navAria">
+            <a data-nav href="index.html" data-i18n="common.navHome">Home</a>
+            <a data-nav href="resume.html" data-i18n="common.navResume">Resume</a>
+            <a data-nav href="medmemo.html" data-i18n="common.navMedMemo">MedMemo</a>
+            <a data-nav href="jobcopilot.html" data-i18n="common.navJobCopilot">JobCopilot</a>
+            <a href="https://github.com/hzhan516" target="_blank" rel="noreferrer" data-i18n="common.navGitHub">GitHub</a>
+          </nav>
+          <div class="lang-switcher" aria-label="Language selector" data-i18n-attr="aria-label:common.languageSelector">
+            <button type="button" data-lang-option="en" data-i18n="common.languageEnglish">EN</button>
+            <button type="button" data-lang-option="zh-CN" data-i18n="common.languageChinese">简中</button>
+          </div>
         </div>
       </div>
     </header>

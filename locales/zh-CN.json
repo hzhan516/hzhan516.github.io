@@ -17,7 +17,8 @@
     "footerResume": "简历",
     "footerEmail": "doyle_zhang@outlook.com",
     "footerMedMemoGitHub": "MedMemo GitHub",
-    "footerJobCopilotGitHub": "JobCopilot GitHub"
+    "footerJobCopilotGitHub": "JobCopilot GitHub",
+    "menuToggle": "切换菜单"
   },
   "meta": {
     "index": {
@@ -45,8 +46,6 @@
     "viewResume": "查看简历",
     "exploreMedMemo": "了解 MedMemo",
     "exploreJobCopilot": "了解 JobCopilot →",
-    "systemsMapAria": "作品集系统图",
-    "systemsMapAlt": "连接简历、MedMemo 和 JobCopilot 的抽象系统图",
     "highlightsAria": "作品集亮点",
     "signalEducation": "ASU 软件工程硕士",
     "signalProjects": "代表项目：MedMemo 与 JobCopilot",
@@ -83,7 +82,11 @@
     "flagshipTitle": "核心项目",
     "flagshipBody": "MedMemo 主要开发者，JobCopilot 主要贡献者与维护者。",
     "certTitle": "职业认证",
-    "certBody": "RHCA、ZStack ZCCE、Alibaba ACP-Cloud。"
+    "certBody": "RHCA、ZStack ZCCE、Alibaba ACP-Cloud。",
+    "codeComment": "作品集要点",
+    "aboutTitle": "关于我",
+    "aboutBody": "张瀚生（Doyle）· 软件工程 · AI 应用",
+    "aboutCta": "查看我的简历 ↗"
   },
   "resume": {
     "eyebrow": "简历",
@@ -137,7 +140,8 @@
     "medmemoDelivery": "补充记忆与隐私流程测试，修复 Windows 打包和 CI 配置问题，支持可重复的桌面构建。",
     "jobcopilotMatching": "接入 PostgreSQL/pgvector 检索，将简历内容与职位描述进行语义匹配，支持 AI 辅助求职。",
     "jobcopilotAsync": "使用 RabbitMQ worker 与 Redis，将耗时 AI 处理与面向用户的 API 流程分离。",
-    "jobcopilotTransactions": "修复简历编辑的事务处理，将向量生成推迟到提交之后执行，使外部 AI 调用位于数据库事务之外。"
+    "jobcopilotTransactions": "修复简历编辑的事务处理，将向量生成推迟到提交之后执行，使外部 AI 调用位于数据库事务之外。",
+    "connect": "联系方式"
   },
   "medmemo": {
     "eyebrow": "MedMemo / 本地优先 AI",

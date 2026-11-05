@@ -17,7 +17,8 @@
     "footerResume": "Resume",
     "footerEmail": "doyle_zhang@outlook.com",
     "footerMedMemoGitHub": "MedMemo GitHub",
-    "footerJobCopilotGitHub": "JobCopilot GitHub"
+    "footerJobCopilotGitHub": "JobCopilot GitHub",
+    "menuToggle": "Toggle menu"
   },
   "meta": {
     "index": {
@@ -45,8 +46,6 @@
     "viewResume": "View resume",
     "exploreMedMemo": "Explore MedMemo",
     "exploreJobCopilot": "Explore JobCopilot →",
-    "systemsMapAria": "Portfolio systems map",
-    "systemsMapAlt": "Abstract map linking resume, MedMemo, and JobCopilot",
     "highlightsAria": "Portfolio highlights",
     "signalEducation": "ASU M.S. Software Engineering",
     "signalProjects": "Selected projects: MedMemo and JobCopilot",
@@ -83,7 +82,11 @@
     "flagshipTitle": "Flagship projects",
     "flagshipBody": "Primary developer of MedMemo and major contributor and maintainer of JobCopilot.",
     "certTitle": "Certifications",
-    "certBody": "RHCA, ZStack ZCCE, and Alibaba ACP-Cloud."
+    "certBody": "RHCA, ZStack ZCCE, and Alibaba ACP-Cloud.",
+    "codeComment": "portfolio highlights",
+    "aboutTitle": "About me",
+    "aboutBody": "Hansheng Zhang (Doyle) · Software engineering · AI applications",
+    "aboutCta": "Read my resume ↗"
   },
   "resume": {
     "eyebrow": "Resume",
@@ -137,7 +140,8 @@
     "medmemoDelivery": "Added memory and privacy workflow tests and fixed Windows packaging and CI issues to support repeatable desktop builds.",
     "jobcopilotMatching": "Integrated PostgreSQL/pgvector retrieval to match resume content with job descriptions and support AI-assisted job search.",
     "jobcopilotAsync": "Used RabbitMQ workers and Redis to separate long-running AI processing from user-facing API workflows.",
-    "jobcopilotTransactions": "Fixed resume-edit transaction handling by deferring vector generation until after commit, keeping external AI calls outside the database transaction."
+    "jobcopilotTransactions": "Fixed resume-edit transaction handling by deferring vector generation until after commit, keeping external AI calls outside the database transaction.",
+    "connect": "Connect"
   },
   "medmemo": {
     "eyebrow": "MedMemo / local-first AI",
